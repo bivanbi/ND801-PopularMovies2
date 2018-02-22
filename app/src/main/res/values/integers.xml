@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <integer name="grid_layout_column_span">3</integer>
+    <integer name="movie_list_item_title_text_maxlines">1</integer>
+    <integer name="movie_list_poster_image_placeholder_minheight">160</integer>
+    <integer name="movie_list_poster_image_placeholder_minwidth">90</integer>
+</resources>
