@@ -1,20 +1,46 @@
 <resources>
     <string name="app_name">P02.1 Popular Movies 1</string>
 
-    <string name="main_error_message">Error loading movie list</string>
-    <string name="progress_indicator_hint">Loading movie list</string>
+    <string name="main_error_message">Error loading movieData list</string>
+    <string name="movie_list_poster_contentdescription">Movie Thumbnail Image, will be replaced with actual movie title at runtime</string>
 
-    <string name="sort_order_most_popular">Most Popular</string>
-    <string name="sort_order_top_rated">Top Rated</string>
-    
-    <string name="movie_details_original_title">Title</string>
+    <string name="movie_details_error_message">Error loading movie data</string>
+
+    <string name="movie_details_poster_contentdescription">Movie Poster Image</string>
+    <string name="movie_details_original_title">Original Title</string>
     <string name="movie_details_overview">Synopsis</string>
-    <string name="movie_details_vote_average">User Rating</string>
     <string name="movie_details_release_date">Release Date</string>
+    <string name="movie_details_user_rating">User Rating</string>
 
     <!--
-    add your API key below and remove comments
-    <string name="themoviedb_api_key">YOUR API KEY HERE</string>
+     "w92", "w154", "w185", "w342", "w500", "w780", or "original".
+     For most phones we recommend using “w185”.
+     -->
+    <string name="themoviedb_image_resolution_thumbnail">w342</string>
+    <string name="themoviedb_image_resolution_large">w780</string>
+    <!--<string name="themoviedb_image_resolution_original">original</string>-->
+
+    <string name="sortby_spinner_title">Sort By</string>
+
+    <string name="themoviedb_sort_by_popularity">Popularity</string>
+    <string name="themoviedb_sort_by_user_rating">User Rating</string>
+
+    <string name="themoviedb_missing_release_date_placeholder">n/a</string>
+
+
+    <string-array name="themoviedb_sort_by_spinner_text">
+        <item>@string/themoviedb_sort_by_popularity</item>
+        <item>@string/themoviedb_sort_by_user_rating</item>
+    </string-array>
+    <!-- do NOT translate themoviedb_sort_by_query_values! -->
+    <string-array name="themoviedb_sort_by_query_values">
+        <item>popularity</item>
+        <item>vote_average</item>
+    </string-array>
+
+    <!-- add your v3 API key below and remove comments -->
+    <!--
+    <string name="themoviedb_v3_api_key">YOUR v3 API KEY HERE</string>
     -->
 
 </resources>

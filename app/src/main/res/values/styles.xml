@@ -8,4 +8,43 @@
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
+    <style name="movie_list_item_text_style">
+        <item name="android:textSize">@dimen/movie_list_item_text_size</item>
+        <item name="android:layout_margin">@dimen/grid_view_movie_poster_margin</item>
+        <item name="android:background">@color/movieListItemTextBackground</item>
+        <item name="android:ellipsize">end</item>
+        <item name="android:maxLines">@integer/movie_list_item_title_text_maxlines</item>
+    </style>
+
+    <style name="movie_detail_poster_style">
+        <item name="android:layout_margin">@dimen/details_movie_poster_margin</item>
+    </style>
+
+    <style name="movie_detail_attribute_title_small_style">
+        <item name="android:paddingLeft">@dimen/details_movie_textview_margin</item>
+        <item name="android:paddingRight">@dimen/details_movie_textview_margin</item>
+        <item name="android:paddingTop">@dimen/details_movie_textview_margin</item>
+    </style>
+
+    <style name="movie_detail_release_date_style" parent="@style/TextAppearance.AppCompat.Display1">
+        <item name="android:paddingLeft">@dimen/details_movie_textview_margin</item>
+        <item name="android:paddingRight">@dimen/details_movie_textview_margin</item>
+        <item name="android:paddingBottom">@dimen/details_movie_textview_margin</item>
+    </style>
+
+    <style name="movie_detail_user_rating_style" parent="@style/TextAppearance.AppCompat.Display2">
+        <item name="android:paddingLeft">@dimen/details_movie_textview_margin</item>
+        <item name="android:paddingRight">@dimen/details_movie_textview_margin</item>
+        <item name="android:paddingBottom">@dimen/details_movie_textview_margin</item>
+    </style>
+
+    <style name="movie_detail_attribute_title_style"
+           parent="@style/TextAppearance.AppCompat.Title">
+        <item name="android:layout_margin">@dimen/details_movie_textview_margin</item>
+    </style>
+
+    <style name="movie_detail_attribute_value_style">
+        <item name="android:layout_margin">@dimen/details_movie_textview_margin</item>
+    </style>
+
 </resources>
