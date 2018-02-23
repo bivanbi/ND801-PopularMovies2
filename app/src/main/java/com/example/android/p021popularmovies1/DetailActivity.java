@@ -15,7 +15,7 @@ import java.util.Locale;
  * Udacity Android Developer Nanodegree - Project Popular Movies stage 1
  *
  * @author balazs.lengyak@gmail.com
- * @version 1.0
+ * @version 1.1
  *          <p>
  *          - Inspired by dozens of online found examples (both visual and code design),
  *          - Might contain traces of code from official Android Developer documentation and

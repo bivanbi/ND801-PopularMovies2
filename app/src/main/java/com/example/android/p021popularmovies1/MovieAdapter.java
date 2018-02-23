@@ -62,6 +62,19 @@ public class MovieAdapter
         View view = layoutInflater.inflate(layoutIdForListItem, parent,
                 false);
 
+        int parentWidth = parent.getWidth();
+        int parentHeight = parent.getHeight();
+        int widthDivider = mContext.getResources().getInteger(R.integer.grid_layout_target_pixel_width);
+        int minNumberOfColumns = mContext.getResources().getInteger(R.integer.grid_layout_minimum_number_of_columns);
+
+        int columnCount = Math.max(parentWidth / widthDivider, minNumberOfColumns);
+
+        ViewGroup.LayoutParams params = view.getLayoutParams();
+
+        //  calculate an optimal grid row height based on common movie poster ratio and screen width
+        params.height = Math.round((float) parentWidth / (float) columnCount * (float) 1.5);
+        view.setLayoutParams(params);
+
         return new MovieAdapterViewHolder(view);
     }
 

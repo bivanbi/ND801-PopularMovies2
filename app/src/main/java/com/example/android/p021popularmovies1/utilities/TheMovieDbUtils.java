@@ -28,7 +28,7 @@ import java.util.Scanner;
  * Udacity Android Developer Nanodegree - Project Popular Movies stage 1
  *
  * @author balazs.lengyak@gmail.com
- * @version 1.0
+ * @version 1.1
  *          <p>
  *          - Inspired by dozens of online found examples (both visual and code design),
  *          - Might contain traces of code from official Android Developer documentation and
@@ -68,13 +68,10 @@ import java.util.Scanner;
  */
 
 public class TheMovieDbUtils {
-    public static final String MOVIE_QUERY_PARAM_ORDER_ASCEND = "asc";
-    public static final String MOVIE_QUERY_PARAM_ORDER_DESCEND = "desc";
     private static final String TAG = TheMovieDbUtils.class.getSimpleName();
-    private static final String MOVIE_DATA_BASE_URL = "https://api.themoviedb.org/3/discover/movie";
+    private static final String MOVIE_LIST_BASE_URL = "http://api.themoviedb.org/3/movie/";
     private static final String MOVIE_IMAGE_BASE_URL = "http://image.tmdb.org/t/p/";
     private static final String MOVIE_QUERY_KEY_API_KEY = "api_key";
-    private static final String MOVIE_QUERY_KEY_SORT_BY = "sort_by";
     private static final String JSON_ATTRIBUTE_RESULTS = "results";
     private static final String JSON_ATTRIBUTE_TITLE = "title";
     private static final String JSON_ATTRIBUTE_POPULARITY = "popularity";
@@ -138,15 +135,14 @@ public class TheMovieDbUtils {
      *
      * @param context   is the calling context
      * @param sortBy    is the attribute to sort by (popularity or user rating)
-     * @param sortOrder is the sort order, asc or desc
      * @return an URL object containing absolute URL to the movie list
      */
-    private static URL constructMovieListUrl(Context context, String sortBy, String sortOrder) {
+    private static URL constructMovieListUrl(Context context, String sortBy) {
 
-        Uri builtUri = Uri.parse(MOVIE_DATA_BASE_URL).buildUpon()
-                .appendQueryParameter(MOVIE_QUERY_KEY_SORT_BY, sortBy + "." + sortOrder)
+        Uri builtUri = Uri.parse(MOVIE_LIST_BASE_URL + sortBy).buildUpon()
                 .appendQueryParameter(MOVIE_QUERY_KEY_API_KEY, context.getString(R.string.themoviedb_v3_api_key))
                 .build();
+
         URL url = null;
 
         try {
@@ -155,6 +151,7 @@ public class TheMovieDbUtils {
             Log.e(TAG, "failed to build URL: " + builtUri.toString());
             e.printStackTrace();
         }
+
 
         return url;
     }
@@ -165,15 +162,14 @@ public class TheMovieDbUtils {
      *
      * @param context   is the calling context
      * @param sortBy    is the sort attribute (popularity or user rating)
-     * @param sortOrder is the sort order asc or desc
      * @return ArrayList of MovieData or null on error
      * @throws IOException   on HTTP request error
      * @throws JSONException on JSON parsing error
      */
-    public static ArrayList<MovieData> getMovieDbData(Context context, String sortBy, String sortOrder)
+    public static ArrayList<MovieData> getMovieDbData(Context context, String sortBy)
             throws IOException, JSONException {
         // build URL
-        URL movieListUrl = constructMovieListUrl(context, sortBy, sortOrder);
+        URL movieListUrl = constructMovieListUrl(context, sortBy);
 
         Log.d(TAG, "getMovieDbData: URL: " + movieListUrl.toString());
 

@@ -2,7 +2,7 @@
 <resources>
     <dimen name="load_indicator_size">42dp</dimen>
     <dimen name="grid_view_movie_poster_margin">8dp</dimen>
-    <dimen name="movie_list_item_text_size">10sp</dimen>
+    <dimen name="movie_list_item_text_size">12sp</dimen>
 
     <dimen name="details_movie_poster_margin">16dp</dimen>
 

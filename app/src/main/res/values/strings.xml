@@ -22,8 +22,8 @@
 
     <string name="sortby_spinner_title">Sort By</string>
 
-    <string name="themoviedb_sort_by_popularity">Popularity</string>
-    <string name="themoviedb_sort_by_user_rating">User Rating</string>
+    <string name="themoviedb_sort_by_popularity">Popular</string>
+    <string name="themoviedb_sort_by_user_rating">Top Rated</string>
 
     <string name="themoviedb_missing_release_date_placeholder">n/a</string>
 
@@ -34,8 +34,8 @@
     </string-array>
     <!-- do NOT translate themoviedb_sort_by_query_values! -->
     <string-array name="themoviedb_sort_by_query_values">
-        <item>popularity</item>
-        <item>vote_average</item>
+        <item>popular</item>
+        <item>top_rated</item>
     </string-array>
 
     <!-- add your v3 API key below and remove comments -->

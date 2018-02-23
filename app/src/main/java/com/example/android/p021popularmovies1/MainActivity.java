@@ -16,6 +16,7 @@ import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import com.example.android.p021popularmovies1.utilities.DisplayUtilities;
 import com.example.android.p021popularmovies1.utilities.TheMovieDbUtils;
 
 import java.util.ArrayList;
@@ -24,7 +25,7 @@ import java.util.ArrayList;
  * Udacity Android Developer Nanodegree - Project Popular Movies stage 1
  *
  * @author balazs.lengyak@gmail.com
- * @version 1.0
+ * @version 1.1
  *          <p>
  *          - Inspired by dozens of online found examples (both visual and code design),
  *          - Might contain traces of code from official Android Developer documentation and
@@ -88,12 +89,11 @@ public class MainActivity extends AppCompatActivity
 
         //  TODO Stage 2: implement some sort of calculation for optimal column count based on actual screen
         //  TODO Stage 2: size. Android's built-in small-normal-large etc. classification is not enough.
-        int spanCount = getResources().getInteger(R.integer.grid_layout_column_span);
-        Log.i(TAG, "spanCount: " + spanCount);
-
+        //  int spanCount = getResources().getInteger(R.integer.grid_layout_column_span);
         //  layout manager to display movie poster grid
-        GridLayoutManager layoutManager = new GridLayoutManager(this, spanCount,
-                GridLayoutManager.VERTICAL, false);
+        GridLayoutManager layoutManager = DisplayUtilities.getOptimalGridLayoutManager(this,
+                        getResources().getInteger(R.integer.grid_layout_target_pixel_width),
+                        getResources().getInteger(R.integer.grid_layout_minimum_number_of_columns));
 
         //  bind our layoutmanager to our recyclerview
         mRecyclerView.setLayoutManager(layoutManager);
@@ -107,19 +107,17 @@ public class MainActivity extends AppCompatActivity
         String defaultSortBy =
                 getResources().getStringArray(R.array.themoviedb_sort_by_query_values)[0];
 
-        loadMovieData(defaultSortBy,
-                TheMovieDbUtils.MOVIE_QUERY_PARAM_ORDER_DESCEND);
+        loadMovieData(defaultSortBy);
     }
 
     /**
      * method to initiate data loading and make responsible view visible
      *
      * @param sortBy    sort by popularity or user rating
-     * @param sortOrder to sort ascending or descending - actually not really used right now
      */
-    private void loadMovieData(String sortBy, String sortOrder) {
+    private void loadMovieData(String sortBy) {
         showMovieDataView();
-        new FetchMovieDataAsyncTask().execute(sortBy, sortOrder);
+        new FetchMovieDataAsyncTask().execute(sortBy);
     }
 
     /**
@@ -167,7 +165,7 @@ public class MainActivity extends AppCompatActivity
         MenuItem sortByMenuItem = menu.findItem(R.id.spinner_sort_by);
         Spinner sortBySpinner = (Spinner) sortByMenuItem.getActionView();
 
-        //  create an arrayadapter so our Spinner will have predefined values the user can select
+        //  create an ArrayAdapter so our Spinner will have predefined values the user can select
         ArrayAdapter<CharSequence> sortByAdapter = ArrayAdapter.createFromResource(this,
                 R.array.themoviedb_sort_by_spinner_text,
                 android.R.layout.simple_spinner_dropdown_item);
@@ -193,7 +191,7 @@ public class MainActivity extends AppCompatActivity
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
         String sortBy = getResources().getStringArray(R.array.themoviedb_sort_by_query_values)[position];
         Log.d(TAG, "selected item: " + position + ", value: " + sortBy);
-        loadMovieData(sortBy, TheMovieDbUtils.MOVIE_QUERY_PARAM_ORDER_DESCEND);
+        loadMovieData(sortBy);
     }
 
     /**
@@ -238,17 +236,15 @@ public class MainActivity extends AppCompatActivity
         @Override
         protected ArrayList<MovieData> doInBackground(String... params) {
 
-            //  expects exactly 2 parameters, no task
-            if (2 != params.length) {
+            //  expects exactly 1 parameter
+            if (1 != params.length) {
                 return null;
             }
 
             String sortBy = params[0];
-            String sortOrder = params[1];
 
             try {
-                return TheMovieDbUtils.getMovieDbData(MainActivity.this,
-                        sortBy, sortOrder);
+                return TheMovieDbUtils.getMovieDbData(MainActivity.this, sortBy);
             } catch (Exception e) {
                 //  TODO Stage 2: optional: display more information on error to user
                 e.printStackTrace();
