@@ -34,14 +34,13 @@ public class MovieDataLoader extends AsyncTaskLoader<ArrayList<MovieData>> {
     private final ArrayList<MovieData> mMovieDataArrayList = null;
     private String mSortBy = null;
     private boolean mLoadFavouritesOnly;
-    /*
-    public MovieDataLoader(Context context, String sortBy) {
-        super(context);
-        Log.d(TAG, "MovieDataLoader constructor without favourites cursor");
-        mSortBy = sortBy;
-    }
-    */
 
+    /**
+     * constructor for our class
+     *
+     * @param context is the calling context
+     * @param sortBy  is the sortby parameter to view most popular / top rated / favourite movies
+     */
     public MovieDataLoader(Context context, String sortBy) {
         super(context);
         Log.d(TAG, "MovieDataLoader constructor with favourites cursor");
@@ -58,7 +57,10 @@ public class MovieDataLoader extends AsyncTaskLoader<ArrayList<MovieData>> {
         forceLoad();
     }
 
-
+    /**
+     * background thread to load movies from either themoviedb.org or from favourite database
+     * @return ArrayList with MovieData objects
+     */
     @Override
     public ArrayList<MovieData> loadInBackground() {
         try {

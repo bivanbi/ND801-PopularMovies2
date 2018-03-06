@@ -100,6 +100,11 @@ public class DetailActivity extends AppCompatActivity implements
 
     private View.OnClickListener mToggleFavouriteOnClickListener;
 
+    /**
+     * constructor to our detailactivity
+     *
+     * @param savedInstanceState is the saved instance state if activity is being restored
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -122,6 +127,10 @@ public class DetailActivity extends AppCompatActivity implements
         setupToggleFavourite();
     }
 
+    /**
+     * helper method to get movie data from intent extra, null on not found
+     * @param callingIntent on
+     */
     private void getMovieDataFromItentExtra(Intent callingIntent) {
         if (!callingIntent.hasExtra(INTENT_EXTRA_NAME_MOVIEDATA)) {
             Log.e(TAG,
@@ -131,6 +140,10 @@ public class DetailActivity extends AppCompatActivity implements
         mMovieData = callingIntent.getParcelableExtra(INTENT_EXTRA_NAME_MOVIEDATA);
     }
 
+    /**
+     * method to check for network connectivity and start loading of reviews and videos,
+     * and display message to let the user know if there is no network connectivity
+     */
     private void setupLoaders() {
         LoaderManager loaderManager = getLoaderManager();
         Bundle args = new Bundle();
@@ -154,6 +167,9 @@ public class DetailActivity extends AppCompatActivity implements
         }
     }
 
+    /**
+     * method to setup layout managers for reviews and videos
+     */
     private void setupLayoutManagers() {
         mReviewsRecyclerView.setLayoutManager(new LinearLayoutManager(this,
                 LinearLayoutManager.VERTICAL, false));
@@ -167,6 +183,9 @@ public class DetailActivity extends AppCompatActivity implements
         mVideosRecyclerView.setAdapter(mVideoAdapter);
     }
 
+    /**
+     * setup onclick listeners to receive user actions on Favourite icon
+     */
     private void setupToggleFavourite() {
         updateFavouriteView();
         if (null == mToggleFavouriteOnClickListener) {
@@ -223,7 +242,9 @@ public class DetailActivity extends AppCompatActivity implements
         MovieVideo.playMovieVideo(this, movieVideo);
     }
 
-
+    /**
+     * update views to reflect actual status of isFavourite of actual movie data
+     */
     public void updateFavouriteView() {
         if (mMovieData.isFavourite()) {
             mMoviePosterFavouriteStar.setImageResource(android.R.drawable.star_big_on);
@@ -240,6 +261,9 @@ public class DetailActivity extends AppCompatActivity implements
         }
     }
 
+    /**
+     * orchestrator method to remove movie from favourites, incl. deleting movie poster from cache
+     */
     private void removeFavourite() {
         int result = removeMovieFromSql();
         Log.d(TAG, "removeFavourite: removeMovieFromSql returned " + result);
@@ -263,6 +287,9 @@ public class DetailActivity extends AppCompatActivity implements
         updateFavouriteView();
     }
 
+    /**
+     * orchestrator method to add movie to favourites, incl. caching movie poster
+     */
     private void addFavourite() {
         if (null != addMovieToSql()) {
             Toast.makeText(DetailActivity.this,
@@ -288,6 +315,10 @@ public class DetailActivity extends AppCompatActivity implements
         }
     }
 
+    /**
+     * method to add movie to favourite SQLite database
+     * @return Uri pointing to newly created entry, null on failure
+     */
     private Uri addMovieToSql() {
         ContentValues contentValues = new ContentValues();
         contentValues.put(MovieContract.FavouriteMovieEntry._ID, mMovieData.getMovieId());
@@ -309,6 +340,10 @@ public class DetailActivity extends AppCompatActivity implements
                 MovieContract.FavouriteMovieEntry.CONTENT_URI, contentValues);
     }
 
+    /**
+     * method to remove from SQLight favourites
+     * @return number of affected rows, should be 1 if everything works as expected
+     */
     private int removeMovieFromSql() {
         return getContentResolver()
                 .delete(ContentUris.withAppendedId(
@@ -318,6 +353,9 @@ public class DetailActivity extends AppCompatActivity implements
                         null);
     }
 
+    /**
+     * class to receive callbacks from review loader
+     */
     public class MovieReviewLoaderCallbacks implements
             LoaderManager.LoaderCallbacks<ArrayList<MovieReview>> {
         private String TAG = MovieReviewLoaderCallbacks.class.getSimpleName();
@@ -354,6 +392,9 @@ public class DetailActivity extends AppCompatActivity implements
         }
     }
 
+    /**
+     * class to receive callbacks from movie video loader
+     */
     public class MovieVideoLoaderCallbacks implements
             LoaderManager.LoaderCallbacks<ArrayList<MovieVideo>> {
 
@@ -396,6 +437,9 @@ public class DetailActivity extends AppCompatActivity implements
         }
     }
 
+    /**
+     * class to receive onclick events from favourite button
+     */
     public class ToggleFavouriteOnClickHandler implements View.OnClickListener {
         ToggleFavouriteOnClickHandler() {
         }
@@ -410,6 +454,9 @@ public class DetailActivity extends AppCompatActivity implements
         }
     }
 
+    /**
+     * class to receive callbacks from poster cache loader
+     */
     public class PosterCacheLoaderCallbacks implements
             LoaderManager.LoaderCallbacks<Integer> {
 
@@ -445,6 +492,9 @@ public class DetailActivity extends AppCompatActivity implements
         }
     }
 
+    /**
+     * callback class to receive success/failure callbacks from Picasso
+     */
     public class PosterLoadIntoViewCallbacks
             implements TheMovieDbUtils.LoadMovieImageIntoViewCallback {
         @Override
@@ -460,8 +510,10 @@ public class DetailActivity extends AppCompatActivity implements
         }
     }
 
+    /**
+     * interface implementation to receive and relay clicks on Share button on movie video
+     */
     public class ShareClickDispatcher {
-
         ShareClickDispatcher() {
         }
 

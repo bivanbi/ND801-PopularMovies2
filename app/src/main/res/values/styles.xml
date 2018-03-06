@@ -29,7 +29,6 @@
         <item name="android:maxLines">@integer/movie_list_item_title_text_maxlines</item>
     </style>
 
-
     <style name="movie_detail_attribute_title_small_style">
         <item name="android:paddingLeft">@dimen/movie_details_textview_margin</item>
         <item name="android:paddingRight">@dimen/movie_details_textview_margin</item>
@@ -46,6 +45,10 @@
         <item name="android:paddingLeft">@dimen/movie_details_textview_margin</item>
         <item name="android:paddingRight">@dimen/movie_details_textview_margin</item>
         <item name="android:paddingBottom">@dimen/movie_details_textview_margin</item>
+    </style>
+
+    <style name="movie_detail_title_style" parent="@style/TextAppearance.AppCompat.Display1">
+        <item name="android:layout_margin">@dimen/movie_details_textview_margin</item>
     </style>
 
     <style name="movie_detail_attribute_title_style"

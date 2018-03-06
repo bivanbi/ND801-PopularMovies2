@@ -10,138 +10,138 @@
     <android.support.constraint.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="@dimen/movie_details_container_padding">
+        android:orientation="vertical"
+        android:padding="@dimen/default_padding">
 
         <!-- movie title -->
         <TextView
             android:id="@+id/textview_detail_title"
-            style="@style/TextAppearance.AppCompat.Display1"
+            style="@style/movie_detail_title_style"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            tools:text="Movie Title"/>
+            tools:text="Movie Title Very Long So It is like This"/>
 
-        <!-- poster image -->
-        <ImageView
-            android:id="@+id/imageview_detail_poster"
-            style="@style/movie_detail_poster_style"
-            android:layout_width="wrap_content"
-            android:layout_height="0dp"
-            android:contentDescription="@string/movie_details_poster_contentdescription"
-            android:cropToPadding="true"
-            android:scaleType="centerCrop"
-            app:layout_constraintDimensionRatio="W,3:2"
-            app:layout_constraintLeft_toRightOf="@+id/movie_details_poster_barrier"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/textview_detail_title"
-            tools:layout_height="300dp"
-            tools:layout_width="200dp"
-            tools:src="@android:drawable/star_big_off"
-        />
-
-        <!-- poster loading progressbar -->
-        <ProgressBar
-            android:id="@+id/progressbar_detail_poster_loading"
-            android:layout_width="@dimen/load_indicator_size"
-            android:layout_height="@dimen/load_indicator_size"
-            android:visibility="invisible"
-            app:layout_constraintBottom_toBottomOf="@id/imageview_detail_poster"
-            app:layout_constraintLeft_toLeftOf="@+id/imageview_detail_poster"
-            app:layout_constraintRight_toRightOf="@id/imageview_detail_poster"
-            app:layout_constraintTop_toTopOf="@+id/imageview_detail_poster"
-            tools:visibility="visible"/>
-
-        <!-- favourite indicator mask -->
-        <ImageView
-            android:id="@+id/imageview_detail_favourite_mask"
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:id="@+id/poster_rating_release_year_linearlayout"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:contentDescription="@string/click_here_to_add_movie_to_favourites"
-            android:src="@drawable/movie_poster_detail_bottomright_triangle"
-            app:layout_constraintBottom_toBottomOf="@+id/imageview_detail_poster"
-            app:layout_constraintRight_toRightOf="@id/imageview_detail_poster"
-        />
+            android:orientation="horizontal"
+            app:layout_constraintTop_toBottomOf="@id/textview_detail_title">
 
-        <!-- favourite indicator -->
-        <ImageView
-            android:id="@+id/imageview_detail_favourite"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:contentDescription="@string/click_here_to_add_movie_to_favourites"
-            android:padding="@dimen/movie_details_favourite_icon_padding"
-            android:src="@android:drawable/star_big_off"
-            app:layout_constraintBottom_toBottomOf="@+id/imageview_detail_poster"
-            app:layout_constraintRight_toRightOf="@+id/imageview_detail_poster"
-        />
+            <android.support.constraint.ConstraintLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
 
-        <!-- poster /rating bottom barrier -->
-        <android.support.constraint.Barrier
-            android:id="@+id/movie_details_poster_barrier"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:barrierDirection="right"
-            app:constraint_referenced_ids="movie_details_release_date_title,textview_detail_release_date,movie_details_user_rating_title,textview_detail_user_rating"
-        />
+                <!-- release date title -->
+                <TextView
+                    android:id="@+id/movie_details_release_date_title"
+                    style="@style/movie_detail_attribute_title_small_style"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/movie_details_release_date"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintRight_toRightOf="parent"
+                />
 
-        <!-- release date title -->
-        <TextView
-            android:id="@+id/movie_details_release_date_title"
-            style="@style/movie_detail_attribute_title_small_style"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/movie_details_release_date"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toLeftOf="@+id/movie_details_poster_barrier"
-            app:layout_constraintTop_toBottomOf="@+id/textview_detail_title"
-        />
+                <!-- release date text -->
+                <TextView
+                    android:id="@+id/textview_detail_release_date"
+                    style="@style/movie_detail_release_date_style"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/movie_details_release_date_title"
+                    tools:text="2999"/>
 
-        <!-- release date text -->
-        <TextView
-            android:id="@+id/textview_detail_release_date"
-            style="@style/movie_detail_release_date_style"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toLeftOf="@+id/movie_details_poster_barrier"
-            app:layout_constraintTop_toBottomOf="@id/movie_details_release_date_title"
-            tools:text="2999"/>
+                <!-- user rating title -->
+                <TextView
+                    android:id="@+id/movie_details_user_rating_title"
+                    style="@style/movie_detail_attribute_title_small_style"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/movie_details_user_rating"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/textview_detail_release_date"
+                />
 
-        <!-- user rating title -->
-        <TextView
-            android:id="@+id/movie_details_user_rating_title"
-            style="@style/movie_detail_attribute_title_small_style"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/movie_details_user_rating"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toLeftOf="@+id/movie_details_poster_barrier"
-            app:layout_constraintTop_toBottomOf="@+id/textview_detail_release_date"
-        />
+                <!-- user rating text -->
+                <TextView
+                    android:id="@+id/textview_detail_user_rating"
+                    style="@style/movie_detail_user_rating_style"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/movie_details_user_rating_title"
+                    tools:text="7.8"/>
 
-        <!-- user rating text -->
-        <TextView
-            android:id="@+id/textview_detail_user_rating"
-            style="@style/movie_detail_user_rating_style"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toLeftOf="@+id/movie_details_poster_barrier"
-            app:layout_constraintTop_toBottomOf="@+id/movie_details_user_rating_title"
-            tools:text="7.8"/>
+            </android.support.constraint.ConstraintLayout>
 
-        <!-- barrier below poster -->
-        <android.support.constraint.Barrier
-            android:id="@+id/movie_details_poster_bottom_barrier"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:barrierDirection="bottom"
-            app:constraint_referenced_ids="textview_detail_user_rating,imageview_detail_poster"
-        />
+            <android.support.constraint.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <!-- poster image -->
+                <ImageView
+                    android:id="@+id/imageview_detail_poster"
+                    style="@style/movie_detail_poster_style"
+                    android:layout_width="wrap_content"
+                    android:layout_height="0dp"
+                    android:contentDescription="@string/movie_details_poster_contentdescription"
+                    android:cropToPadding="true"
+                    android:scaleType="centerCrop"
+                    app:layout_constraintDimensionRatio="W,3:2"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintRight_toRightOf="parent"
+                    tools:layout_height="300dp"
+                    tools:layout_width="200dp"
+                    tools:src="@android:drawable/star_big_off"
+                />
+
+                <!-- poster loading progressbar -->
+                <ProgressBar
+                    android:id="@+id/progressbar_detail_poster_loading"
+                    android:layout_width="@dimen/load_indicator_size"
+                    android:layout_height="@dimen/load_indicator_size"
+                    android:visibility="invisible"
+                    app:layout_constraintBottom_toBottomOf="@id/imageview_detail_poster"
+                    app:layout_constraintLeft_toLeftOf="@+id/imageview_detail_poster"
+                    app:layout_constraintRight_toRightOf="@id/imageview_detail_poster"
+                    app:layout_constraintTop_toTopOf="@+id/imageview_detail_poster"
+                    tools:visibility="visible"/>
+
+                <!-- favourite indicator mask -->
+                <ImageView
+                    android:id="@+id/imageview_detail_favourite_mask"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:contentDescription="@string/click_here_to_add_movie_to_favourites"
+                    android:src="@drawable/movie_poster_detail_bottomright_triangle"
+                    app:layout_constraintBottom_toBottomOf="@+id/imageview_detail_poster"
+                    app:layout_constraintRight_toRightOf="@id/imageview_detail_poster"
+                />
+
+                <!-- favourite indicator -->
+                <ImageView
+                    android:id="@+id/imageview_detail_favourite"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:contentDescription="@string/click_here_to_add_movie_to_favourites"
+                    android:padding="@dimen/movie_details_favourite_icon_padding"
+                    android:src="@android:drawable/star_big_off"
+                    app:layout_constraintBottom_toBottomOf="@+id/imageview_detail_poster"
+                    app:layout_constraintRight_toRightOf="@+id/imageview_detail_poster"
+                />
+
+            </android.support.constraint.ConstraintLayout>
+        </LinearLayout>
 
         <!-- movie original title title -->
         <TextView
@@ -150,7 +150,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/movie_details_original_title"
-            app:layout_constraintTop_toBottomOf="@+id/movie_details_poster_bottom_barrier"/>
+            app:layout_constraintTop_toBottomOf="@+id/poster_rating_release_year_linearlayout"
+        />
 
         <!-- movie original title text -->
         <TextView
@@ -294,7 +295,6 @@
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toBottomOf="@id/recyclerview_reviews"
         />
-
     </android.support.constraint.ConstraintLayout>
 </ScrollView>
 
