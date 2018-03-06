@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest package="com.example.android.p021popularmovies1"
-          xmlns:android="http://schemas.android.com/apk/res/android">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+          package="com.example.android.p022popularmovies2">
 
     <uses-sdk android:maxSdkVersion="27"/>
 
     <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
 
     <application
         android:allowBackup="false"
@@ -14,7 +15,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".MainActivity">
+        <activity android:name="com.example.android.p022popularmovies2.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
 
@@ -25,9 +26,13 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".DetailActivity"
-            android:parentActivityName=".MainActivity">
+            android:name="com.example.android.p022popularmovies2.DetailActivity"
+            android:parentActivityName="com.example.android.p022popularmovies2.MainActivity">
         </activity>
+        <!-- do not expose our provider till we fully understand its consequences -->
+        <provider android:name=".data.MovieProvider"
+                  android:authorities="com.example.android.p022popularmovies2"
+                  android:exported="false"/>
     </application>
 
 </manifest>

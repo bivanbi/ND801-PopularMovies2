@@ -1,16 +1,34 @@
 <resources>
-    <string name="app_name">P02.1 Popular Movies 1</string>
+    <string name="app_name">P02.2 Popular Movies 2</string>
 
     <string name="main_error_message">Error loading movieData list</string>
+
     <string name="movie_list_poster_contentdescription">Movie Thumbnail Image, will be replaced with actual movie title at runtime</string>
+    <string name="movie_list_favourite_icon_contentdescription">Movie is marked as favourite
+    </string>
 
     <string name="movie_details_error_message">Error loading movie data</string>
 
     <string name="movie_details_poster_contentdescription">Movie Poster Image</string>
+
+    <string name="click_here_to_add_movie_to_favourites">Click here to add movie to favourites
+    </string>
+    <string name="click_here_to_remove_movie_from_favourites">Click here to remove movie from
+        favourites
+    </string>
+
     <string name="movie_details_original_title">Original Title</string>
     <string name="movie_details_overview">Synopsis</string>
     <string name="movie_details_release_date">Release Date</string>
     <string name="movie_details_user_rating">User Rating</string>
+
+    <string name="movie_details_videos">Videos</string>
+    <string name="details_videos_error_message">Error loading videos</string>
+
+
+    <string name="movie_details_reviews">Reviews</string>
+    <string name="movie_details_review_author_format_string">by %s:</string>
+    <string name="details_reviews_error_message">Error loading reviews</string>
 
     <!--
      "w92", "w154", "w185", "w342", "w500", "w780", or "original".
@@ -24,23 +42,50 @@
 
     <string name="themoviedb_sort_by_popularity">Popular</string>
     <string name="themoviedb_sort_by_user_rating">Top Rated</string>
+    <string name="themoviedb_favourites">Favourites</string>
 
     <string name="themoviedb_missing_release_date_placeholder">n/a</string>
 
+    <string name="toast_marked_as_favourite">Marked as favourite</string>
+    <string name="toast_removed_from_favourites">Removed from favourites</string>
 
     <string-array name="themoviedb_sort_by_spinner_text">
         <item>@string/themoviedb_sort_by_popularity</item>
         <item>@string/themoviedb_sort_by_user_rating</item>
+        <item>@string/themoviedb_favourites</item>
     </string-array>
     <!-- do NOT translate themoviedb_sort_by_query_values! -->
     <string-array name="themoviedb_sort_by_query_values">
         <item>popular</item>
         <item>top_rated</item>
+        <item>favourites</item>
     </string-array>
 
-    <!-- add your v3 API key below and remove comments -->
-    <!--
-    <string name="themoviedb_v3_api_key">YOUR v3 API KEY HERE</string>
-    -->
+    <string name="themoviedb_source_favourites" translatable="false">favourites</string>
+
+    <string name="share_movie_video_message_format_string">Hello there,\n\nI found this wonderful
+        movie \'%s\', I thought you would enjoy too!\n\nHere is a %s on %s for you to see: %s
+    </string>
+
+    <string name="main_no_network_load_favourite_message">Seems like you have no network
+        connectivity right now.
+    </string>
+    <string name="main_no_network_load_favourite_button">Show my offline stored favourites!</string>
+
+    <string name="movie_detail_video_share_contentdescription">Share Video</string>
+    <string name="movie_detail_video_play">Launch video</string>
+    <string name="error_message_no_app_found_to_play_video">No app or browser found to play video.
+    </string>
+    <string name="error_message_video_site_unknown_format_string">Video site %s is unknown</string>
+
+    <string name="error_message_cannot_construct_video_web_video_url">Sorry, I do not know how to
+        create URL for video videos on %s
+    </string>
+    <string name="error_message_no_app_found_to_share_video">No app found to share text/plain
+    </string>
+
+    <string name="error_message_no_network">Could not connect to network</string>
+
+    <string name="details_poster_load_failed">Failed to load movie poster</string>
 
 </resources>

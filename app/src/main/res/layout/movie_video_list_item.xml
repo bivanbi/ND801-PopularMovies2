@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    style="@style/movie_detail_video_list_item_container"
+    android:layout_width="match_parent"
+
+    android:layout_height="wrap_content">
+
+    <android.support.constraint.Barrier
+        android:id="@+id/barrier_video_language_right"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:barrierDirection="right"
+        app:constraint_referenced_ids="textview_video_language,textview_video_size"
+    />
+
+
+    <TextView
+        android:id="@+id/textview_video_name"
+        style="@style/movie_detail_video_list_item_text"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toRightOf="@id/barrier_video_language_right"
+        app:layout_constraintRight_toLeftOf="@id/barrier_video_share_left"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="Teaser #1"
+    />
+
+    <android.support.constraint.Barrier
+        android:id="@+id/barrier_video_share_left"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:barrierDirection="left"
+        app:constraint_referenced_ids="movie_detail_video_share_imageview"
+    />
+
+    <ImageView
+        android:id="@+id/movie_detail_video_share_imageview"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:contentDescription="@string/movie_detail_video_share_contentdescription"
+        android:src="@android:drawable/ic_menu_share"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+    />
+
+
+</android.support.constraint.ConstraintLayout>

@@ -8,43 +8,99 @@
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
+    <!-- movie list item container style -->
+    <style name="movie_list_item_container_style">
+        <item name="android:padding">@dimen/movie_list_item_container_padding</item>
+    </style>
+
+    <!-- movie list item poster style -->
+    <style name="movie_detail_poster_style">
+        <item name="android:minWidth">@dimen/movie_detail_poster_minimum_width</item>
+    </style>
+
+    <!-- movie list item text style -->
     <style name="movie_list_item_text_style">
         <item name="android:textSize">@dimen/movie_list_item_text_size</item>
-        <item name="android:layout_margin">@dimen/grid_view_movie_poster_margin</item>
-        <item name="android:background">@color/movieListItemTextBackground</item>
+        <item name="android:layout_marginBottom">@dimen/movie_list_text_margin_bottom</item>
+        <item name="android:padding">@dimen/movie_list_text_padding</item>
+        <item name="android:background">@color/colorPrimary</item>
+        <item name="android:textColor">@color/movieListItemTextColor</item>
         <item name="android:ellipsize">end</item>
         <item name="android:maxLines">@integer/movie_list_item_title_text_maxlines</item>
     </style>
 
-    <style name="movie_detail_poster_style">
-        <item name="android:layout_margin">@dimen/details_movie_poster_margin</item>
-    </style>
 
     <style name="movie_detail_attribute_title_small_style">
-        <item name="android:paddingLeft">@dimen/details_movie_textview_margin</item>
-        <item name="android:paddingRight">@dimen/details_movie_textview_margin</item>
-        <item name="android:paddingTop">@dimen/details_movie_textview_margin</item>
+        <item name="android:paddingLeft">@dimen/movie_details_textview_margin</item>
+        <item name="android:paddingRight">@dimen/movie_details_textview_margin</item>
+        <item name="android:paddingTop">@dimen/movie_details_textview_margin</item>
     </style>
 
     <style name="movie_detail_release_date_style" parent="@style/TextAppearance.AppCompat.Display1">
-        <item name="android:paddingLeft">@dimen/details_movie_textview_margin</item>
-        <item name="android:paddingRight">@dimen/details_movie_textview_margin</item>
-        <item name="android:paddingBottom">@dimen/details_movie_textview_margin</item>
+        <item name="android:paddingLeft">@dimen/movie_details_textview_margin</item>
+        <item name="android:paddingRight">@dimen/movie_details_textview_margin</item>
+        <item name="android:paddingBottom">@dimen/movie_details_textview_margin</item>
     </style>
 
     <style name="movie_detail_user_rating_style" parent="@style/TextAppearance.AppCompat.Display2">
-        <item name="android:paddingLeft">@dimen/details_movie_textview_margin</item>
-        <item name="android:paddingRight">@dimen/details_movie_textview_margin</item>
-        <item name="android:paddingBottom">@dimen/details_movie_textview_margin</item>
+        <item name="android:paddingLeft">@dimen/movie_details_textview_margin</item>
+        <item name="android:paddingRight">@dimen/movie_details_textview_margin</item>
+        <item name="android:paddingBottom">@dimen/movie_details_textview_margin</item>
     </style>
 
     <style name="movie_detail_attribute_title_style"
            parent="@style/TextAppearance.AppCompat.Title">
-        <item name="android:layout_margin">@dimen/details_movie_textview_margin</item>
+        <item name="android:layout_margin">@dimen/movie_details_textview_margin</item>
     </style>
 
     <style name="movie_detail_attribute_value_style">
-        <item name="android:layout_margin">@dimen/details_movie_textview_margin</item>
+        <item name="android:layout_margin">@dimen/movie_details_textview_margin</item>
     </style>
 
+    <style name="movie_list_no_network_click_to_favourites_dialog">
+        <item name="android:padding">@dimen/default_padding</item>
+        <item name="android:background">@color/colorAccent</item>
+    </style>
+
+    <style name="movie_detail_video_list_item_container">
+        <item name="android:background">@color/movieDetailsVideoListItemBackground</item>
+        <item name="android:layout_marginTop">@dimen/default_margin</item>
+        <item name="android:layout_marginBottom">@dimen/default_margin</item>
+        <item name="android:paddingLeft">@dimen/default_padding</item>
+    </style>
+
+    <style name="movie_detail_video_list_item_text">
+        <item name="android:padding">@dimen/movie_detail_video_list_item_text_padding</item>
+    </style>
+
+    <style name="movie_detail_review_list_item_container">
+        <item name="android:background">@color/movieDetailsVideoListItemBackground</item>
+        <item name="android:layout_marginTop">@dimen/default_margin</item>
+        <item name="android:layout_marginBottom">@dimen/default_margin</item>
+        <item name="android:paddingLeft">@dimen/default_padding</item>
+    </style>
+
+    <style name="movie_detail_review_list_item_author_text"
+           parent="@style/TextAppearance.AppCompat.Subhead">
+        <item name="android:paddingLeft">@dimen/movie_detail_review_author_left_padding</item>
+        <item name="android:paddingTop">@dimen/default_padding</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="movie_detail_review_list_item_text"
+           parent="@style/TextAppearance.AppCompat.Subhead">
+        <item name="android:padding">@dimen/default_padding</item>
+    </style>
+
+    <style name="movie_detail_video_or_review_load_error_message">
+        <item name="android:background">@color/colorAccent</item>
+        <item name="android:padding">@dimen/default_padding</item>
+    </style>
+
+    <style name="movie_detail_review_or_video_list_vertical_bar">
+        <item name="android:background">@color/movieDetailsVideoListItemBackground</item>
+        <item name="android:layout_marginRight">@dimen/movie_details_textview_margin</item>
+        <item name="android:layout_marginTop">@dimen/default_margin</item>
+        <item name="android:layout_marginBottom">@dimen/default_margin</item>
+    </style>
 </resources>

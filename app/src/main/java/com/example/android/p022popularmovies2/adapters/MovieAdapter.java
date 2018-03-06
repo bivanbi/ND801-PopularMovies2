@@ -1,23 +1,31 @@
-package com.example.android.p021popularmovies1;
+package com.example.android.p022popularmovies2.adapters;
 
 import android.content.Context;
+import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
-import com.example.android.p021popularmovies1.utilities.TheMovieDbUtils;
+import com.example.android.p022popularmovies2.R;
+import com.example.android.p022popularmovies2.data.MovieData;
+import com.example.android.p022popularmovies2.utilities.TheMovieDbUtils;
 
 import java.util.ArrayList;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.OnClick;
+
 /**
- * Udacity Android Developer Nanodegree - Project Popular Movies stage 1
+ * Udacity Android Developer Nanodegree - Project Popular Movies stage 2
  *
  * @author balazs.lengyak@gmail.com
- * @version 1.0
+ * @version 2.0
  *          <p>
  *          - Inspired by dozens of online found examples (both visual and code design),
  *          - Might contain traces of code from official Android Developer documentation and
@@ -31,6 +39,8 @@ public class MovieAdapter
 
     private static final String TAG = MovieAdapter.class.getSimpleName();
     private final MovieAdapterOnClickHandler mMovieAdapterOnClickHandler;
+    private final int nonFavouriteBackgroundColor;
+    private final int favouriteBackgroundColor;
     private ArrayList<MovieData> mMovieDataArrayList;
     //  according to the books, storing context might not always be a good idea, because it
     //  can interfere with Java's Garbage Collection.
@@ -41,8 +51,12 @@ public class MovieAdapter
      *
      * @param clickHandler onClick handler object
      */
-    public MovieAdapter(MovieAdapterOnClickHandler clickHandler) {
+    public MovieAdapter(MovieAdapterOnClickHandler clickHandler,
+            int nonFavouriteBackgroundColor,
+            int favouriteBackgroundColor) {
         mMovieAdapterOnClickHandler = clickHandler;
+        this.nonFavouriteBackgroundColor = nonFavouriteBackgroundColor;
+        this.favouriteBackgroundColor = favouriteBackgroundColor;
     }
 
     /**
@@ -53,27 +67,15 @@ public class MovieAdapter
      * @param viewType unused here
      * @return MovieAdapterViewHolder
      */
+    @NonNull
     @Override
-    public MovieAdapterViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public MovieAdapterViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         mContext = parent.getContext();
         int layoutIdForListItem = R.layout.movie_list_item;
         LayoutInflater layoutInflater = LayoutInflater.from(mContext);
 
         View view = layoutInflater.inflate(layoutIdForListItem, parent,
                 false);
-
-        int parentWidth = parent.getWidth();
-        int parentHeight = parent.getHeight();
-        int widthDivider = mContext.getResources().getInteger(R.integer.grid_layout_target_pixel_width);
-        int minNumberOfColumns = mContext.getResources().getInteger(R.integer.grid_layout_minimum_number_of_columns);
-
-        int columnCount = Math.max(parentWidth / widthDivider, minNumberOfColumns);
-
-        ViewGroup.LayoutParams params = view.getLayoutParams();
-
-        //  calculate an optimal grid row height based on common movie poster ratio and screen width
-        params.height = Math.round((float) parentWidth / (float) columnCount * (float) 1.5);
-        view.setLayoutParams(params);
 
         return new MovieAdapterViewHolder(view);
     }
@@ -85,26 +87,39 @@ public class MovieAdapter
      * @param position is the index of MovieData in MovieDataArrayList to be bound to ViewHolder
      */
     @Override
-    public void onBindViewHolder(MovieAdapterViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull MovieAdapterViewHolder holder, int position) {
         MovieData movieData = mMovieDataArrayList.get(position);
 
-        String posterUrl = movieData.getPosterUrl();
+        String posterUrl = movieData.getPosterPath();
 
+        //  check if movie has poster
         if (posterUrl.equals("null")) {
             Log.i(TAG, "onBindViewHolder: movie " + movieData.getTitle()
                     + " has no poster image associated");
             holder.mMoviePosterImageView.setImageResource(android.R.drawable.star_big_off);
         } else {
+            //  initiate loading poster into view
+            holder.mMoviePosterLoadingProgressbar.setVisibility(View.VISIBLE);
             TheMovieDbUtils.loadMovieImageIntoView(mContext,
                     holder.mMoviePosterImageView,
-                    movieData.getPosterUrl(),
-                    mContext.getString(R.string.themoviedb_image_resolution_thumbnail));
+                    movieData,
+                    mContext.getString(R.string.themoviedb_image_resolution_thumbnail), holder);
         }
 
         String title = movieData.getTitle();
+
         // update contentDescription so screen readers might benefit from it
         holder.mMovieTitleTextView.setText(title);
         holder.mMoviePosterImageView.setContentDescription(title);
+
+        //  if movie is favourite, indicate it with title background color and icon on poster
+        if (movieData.isFavourite()) {
+            holder.mMovieTitleTextView.setBackgroundColor(favouriteBackgroundColor);
+            holder.mMovieFavouriteImageView.setVisibility(View.VISIBLE);
+        } else {
+            holder.mMovieTitleTextView.setBackgroundColor(nonFavouriteBackgroundColor);
+            holder.mMovieFavouriteImageView.setVisibility(View.INVISIBLE);
+        }
     }
 
     /**
@@ -127,18 +142,13 @@ public class MovieAdapter
      */
     public void setMovieDataArrayList(ArrayList<MovieData> arrayList) {
         Log.i(TAG, "updating Movie List, current count: " + getItemCount());
-        if (null == arrayList) {
-            Log.i(TAG, "updating Movie List, current count: " + getItemCount() + ", new: NULL");
-        } else {
-            Log.i(TAG, "updating Movie List, current count: "
-                    + getItemCount() + ", new: " + arrayList.size());
-        }
-
         mMovieDataArrayList = arrayList;
         notifyDataSetChanged();
     }
 
-    //  define interface to be able to receive onClick events
+    /**
+     * onclick interface definition for handling onclick events on movie list items
+     */
     public interface MovieAdapterOnClickHandler {
         void onClick(MovieData movieData);
     }
@@ -147,22 +157,27 @@ public class MovieAdapter
      * inner class to implement ViewHolder pattern to speed up scrolling
      */
     public class MovieAdapterViewHolder extends RecyclerView.ViewHolder
-            implements View.OnClickListener {
-        public final ImageView mMoviePosterImageView;
-        public final TextView mMovieTitleTextView;
+            implements View.OnClickListener, TheMovieDbUtils.LoadMovieImageIntoViewCallback {
+
+        @BindView(R.id.imageview_movie_list_item_poster)
+        ImageView mMoviePosterImageView;
+        @BindView(R.id.textview_movie_list_element)
+        TextView mMovieTitleTextView;
+        @BindView(R.id.imageview_movie_list_item_favourite)
+        ImageView mMovieFavouriteImageView;
+        @BindView(R.id.progressbar_movie_list_item_poster_loading)
+        ProgressBar mMoviePosterLoadingProgressbar;
 
         /**
          * constructor to ViewHolder object
          *
          * @param view is the view that should be held
          */
-        public MovieAdapterViewHolder(View view) {
+        MovieAdapterViewHolder(View view) {
             super(view);
 
-            mMoviePosterImageView = view.findViewById(R.id.imageview_movie_list_element);
-            mMovieTitleTextView = view.findViewById(R.id.textview_movie_list_element);
-            mMoviePosterImageView.setOnClickListener(this);
-            mMovieTitleTextView.setOnClickListener(this);
+            //  onClick listeners will be set up later in the code with ButterKnife's @OnClick
+            ButterKnife.bind(this, view);
         }
 
         /**
@@ -174,9 +189,35 @@ public class MovieAdapter
          * @param v is the view that as been clicked
          */
         @Override
+        @OnClick({R.id.imageview_movie_list_item_poster, R.id.textview_movie_list_element})
         public void onClick(View v) {
             int adapterPosition = getAdapterPosition();
             mMovieAdapterOnClickHandler.onClick(mMovieDataArrayList.get(adapterPosition));
+        }
+
+        /**
+         * method to receive success callback from TheMovieDbUtils.loadMovieImageIntoView
+         *
+         * @param view      is the view the poster has been loaded into
+         * @param movieData is the movieData object whose poster has been loaded
+         * @param imageSize is the size string of the image - see strings.xml for examples
+         */
+        @Override
+        public void onSuccess(View view, MovieData movieData, String imageSize) {
+            //  TODO hide progressbar
+            mMoviePosterLoadingProgressbar.setVisibility(View.INVISIBLE);
+        }
+
+        /**
+         * method to receive failure callback from TheMovieDbUtils.loadMovieImageIntoView
+         *
+         * @param view      is the view the poster should have been loaded into
+         * @param movieData is the movieData object whose poster should have been loaded
+         * @param imageSize is the size string of the image - see strings.xml for examples
+         */
+        @Override
+        public void onError(View view, MovieData movieData, String imageSize) {
+            mMoviePosterLoadingProgressbar.setVisibility(View.INVISIBLE);
         }
     }
 }

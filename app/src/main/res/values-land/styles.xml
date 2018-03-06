@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="movie_detail_release_date_style" parent="@style/TextAppearance.AppCompat.Display2">
+        <item name="android:paddingLeft">@dimen/movie_details_textview_margin</item>
+        <item name="android:paddingRight">@dimen/movie_details_textview_margin</item>
+        <item name="android:paddingBottom">@dimen/movie_details_textview_margin</item>
+    </style>
+
+</resources>

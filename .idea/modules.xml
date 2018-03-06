@@ -2,8 +2,8 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/P021PopularMovies1.iml" filepath="$PROJECT_DIR$/P021PopularMovies1.iml" />
-      <module fileurl="file://$USER_HOME$/Dropbox/src/udacity_android_developer_nanodegree/ud851-projects/P021PopularMovies1/app/app.iml" filepath="$USER_HOME$/Dropbox/src/udacity_android_developer_nanodegree/ud851-projects/P021PopularMovies1/app/app.iml" />
+      <module fileurl="file://$USER_HOME$/Dropbox/src/udacity_android_developer_nanodegree/ud851-projects/P022PopularMovies2/P022PopularMovies2.iml" filepath="$USER_HOME$/Dropbox/src/udacity_android_developer_nanodegree/ud851-projects/P022PopularMovies2/P022PopularMovies2.iml" />
+      <module fileurl="file://$USER_HOME$/Dropbox/src/udacity_android_developer_nanodegree/ud851-projects/P022PopularMovies2/app/app.iml" filepath="$USER_HOME$/Dropbox/src/udacity_android_developer_nanodegree/ud851-projects/P022PopularMovies2/app/app.iml" />
     </modules>
   </component>
 </project>

@@ -1,14 +1,14 @@
-package com.example.android.p021popularmovies1.utilities;
+package com.example.android.p022popularmovies2.utilities;
 
 import android.app.Activity;
 import android.support.v7.widget.GridLayoutManager;
 import android.util.DisplayMetrics;
 
 /**
- * Udacity Android Developer Nanodegree - Project Popular Movies stage 1
+ * Udacity Android Developer Nanodegree - Project Popular Movies stage 2
  *
  * @author balazs.lengyak@gmail.com
- * @version 1.1
+ * @version 2.0
  *          <p>
  *          - Inspired by dozens of online found examples (both visual and code design),
  *          - Might contain traces of code from official Android Developer documentation and
@@ -67,6 +67,4 @@ public class DisplayUtilities {
             return displayMetrics.widthPixels;
         }
     }
-
-
 }

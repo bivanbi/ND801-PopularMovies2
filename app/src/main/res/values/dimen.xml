@@ -1,14 +1,26 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <dimen name="load_indicator_size">42dp</dimen>
-    <dimen name="grid_view_movie_poster_margin">8dp</dimen>
+
+    <dimen name="default_padding">8dp</dimen>
+    <dimen name="default_margin">4dp</dimen>
+
+    <dimen name="movie_list_item_container_padding">4dp</dimen>
+
+    <dimen name="movie_list_text_margin_bottom">8dp</dimen>
+    <dimen name="movie_list_text_padding">2dp</dimen>
     <dimen name="movie_list_item_text_size">12sp</dimen>
+    <dimen name="movie_list_item_favourite_icon_padding">4dp</dimen>
 
-    <dimen name="details_movie_poster_margin">16dp</dimen>
+    <dimen name="movie_details_container_padding">4dp</dimen>
+    <dimen name="movie_details_favourite_icon_padding">4dp</dimen>
+    <dimen name="movie_details_textview_margin">8dp</dimen>
 
-    <dimen name="details_movie_textview_margin">8dp</dimen>
+    <dimen name="movie_detail_poster_minimum_width">100dp</dimen>
 
-    <dimen name="movie_list_poster_image_minimum_width">90</dimen>
-    <dimen name="movie_list_poster_image_minimum_height">160</dimen>
+    <dimen name="movie_detail_video_list_item_text_padding">2dp</dimen>
+    <dimen name="movie_detail_review_author_left_padding">0dp</dimen>
+
+    <dimen name="movie_detail_video_or_review_list_vertical_bar">6dp</dimen>
 
 </resources>
