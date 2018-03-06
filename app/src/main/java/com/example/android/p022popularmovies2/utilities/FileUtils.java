@@ -12,8 +12,19 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 
 /**
- * TODO documentation
- * Created by bivanbi on 2018.03.03..
+ * Udacity Android Developer Nanodegree - Project Popular Movies stage 2
+ *
+ * @author balazs.lengyak@gmail.com
+ * @version 2.0
+ *          <p>
+ *          - Inspired by dozens of online found examples (both visual and code design),
+ *          - Might contain traces of code from official Android Developer documentation and
+ *          default templates from Android Studio
+ *          - getGridViewOptimalNumberOfColumns code received from Udacity reviewer
+ *          <p>
+ *          MovieAdapter to be bound to RecyclerView to help display a list of movie reviews
+ *
+ * class to provide methods to store, retrieve and delete fileson internal storage
  */
 
 public class FileUtils {
@@ -29,7 +40,14 @@ public class FileUtils {
     private static final String MOVIE_POSTER_CACHE_DIRECTORY_FORMAT_STRINT = "%d";
     private static final String MOVIE_POSTER_CACHE_FILENAME_FORMAT_STRING = "movie_poster_%d_%s%s";
 
-    static File getPosterCacheDir(Context context, MovieData movieData) {
+    /**
+     * create and get poster cache directory
+     *
+     * @param context   calling context
+     * @param movieData movie data cache directory should be created for
+     * @return File pointing to cache directory, null on failure
+     */
+    private static File getPosterCacheDir(Context context, MovieData movieData) {
         String dirName = constructPosterCacheDirName(context, movieData);
         File baseDir = context.getFilesDir();
         Log.d(TAG, "getPosterCacheDir: basedir: " + baseDir.toString());
@@ -55,7 +73,12 @@ public class FileUtils {
         return posterCacheDir;
     }
 
-
+    /**
+     * create name for poster cache directory
+     * @param context is the calling context
+     * @param movieData is the movie data
+     * @return String with directory name
+     */
     private static String constructPosterCacheDirName(Context context, MovieData movieData) {
         String dirName = String.format(context.getResources().getConfiguration().locale,
                 MOVIE_POSTER_CACHE_DIRECTORY_FORMAT_STRINT,
@@ -64,6 +87,13 @@ public class FileUtils {
         return dirName;
     }
 
+    /**
+     * method to construct image cache file name based on movieData
+     * @param context is the calling context
+     * @param movieData is the movie data
+     * @param imageSize is the image size string used in themoviedb.org API
+     * @return String with cache file name
+     */
     @Nullable
     private static String constructImageCacheFileName(Context context, MovieData movieData,
             String imageSize) {
@@ -86,6 +116,11 @@ public class FileUtils {
         return fileName;
     }
 
+    /**
+     * get image extension from path
+     * @param path is the pathname to original (to be downloaded) image
+     * @return extension with leading dot e.g: .jpg
+     */
     private static String getImageExtensionFromPath(String path) {
         String extension = getFileNameExtension(path);
         if (null == extension) {
@@ -104,6 +139,14 @@ public class FileUtils {
         return extension;
     }
 
+    /**
+     * method to get File object pointing to poster cache file
+     *
+     * @param context is the calling context
+     * @param movieData is the movie data
+     * @param imageSize is the image size string used in themoviedb.org API
+     * @return File pointing to poster cache file, null on error
+     */
     @Nullable
     static File getMoviePosterCacheFile(Context context,
             MovieData movieData, String imageSize) {
@@ -121,26 +164,13 @@ public class FileUtils {
         return new File(posterCacheDir, filename);
     }
 
-    static void saveBitmapToFile(Bitmap bitmap, String filename,
-            Bitmap.CompressFormat format, int quality) {
-        FileOutputStream out = null;
-        try {
-            out = new FileOutputStream(filename);
-            bitmap.compress(format, quality, out);
-        } catch (Exception e) {
-            e.printStackTrace();
-        } finally {
-            try {
-                if (out != null) {
-                    out.close();
-                }
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
-    }
-
-    static boolean deleteDirectory(File directory) {
+    /**
+     * method to delete directory along with contained files
+     *
+     * @param directory is the File object pointing to directory
+     * @return true on success
+     */
+    private static boolean deleteDirectory(File directory) {
 
         if (!directory.exists()) {
             return true;
@@ -170,6 +200,11 @@ public class FileUtils {
         return result;
     }
 
+    /**
+     * method to split filename to filename and extension like this: read.me -> 'read' and '.me'
+     * @param filenameWithExtension is the original filename with extension
+     * @return String[] with first element filename, second element extension, null on failure
+     */
     @Nullable
     private static String[] splitFileNameAndExtension(String filenameWithExtension) {
         //  in UNIXes, filenames beginning with a dot are considered hidden files and do not
@@ -207,6 +242,11 @@ public class FileUtils {
         };
     }
 
+    /**
+     * method to get filename extension from filenmae
+     * @param fileName original filename with extension
+     * @return String extension on success, null on failure
+     */
     @Nullable
     private static String getFileNameExtension(String fileName) {
         String[] fileNameParts = splitFileNameAndExtension(fileName);
@@ -218,26 +258,6 @@ public class FileUtils {
         return fileNameParts[1];
     }
 
-
-    static Bitmap.CompressFormat getCompressFormatFromFileName(String fileName) {
-
-        String extension = getFileNameExtension(fileName);
-
-        if (null == extension) {
-            return null;
-        }
-
-        switch (extension.toLowerCase()) {
-            case FILE_NAME_EXTENSION_JPEG:
-                return COMPRESS_FORMAT_JPEG;
-
-            case FILE_NAME_EXTENSION_PNG:
-                return COMPRESS_FORMAT_PNG;
-
-            default:
-                return null;
-        }
-    }
 
     public static boolean deletePosterCache(Context context, MovieData movieData) {
         String dirName = constructPosterCacheDirName(context, movieData);

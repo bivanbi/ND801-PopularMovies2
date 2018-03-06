@@ -204,7 +204,6 @@ public class MovieAdapter
          */
         @Override
         public void onSuccess(View view, MovieData movieData, String imageSize) {
-            //  TODO hide progressbar
             mMoviePosterLoadingProgressbar.setVisibility(View.INVISIBLE);
         }
 

@@ -7,8 +7,17 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 /**
- * TODO documentation
- * Created by bivanbi on 2018.02.26..
+ * Udacity Android Developer Nanodegree - Project Popular Movies stage 2
+ *
+ * @author balazs.lengyak@gmail.com
+ * @version 2.0
+ *          <p>
+ *          - Inspired by dozens of online found examples (both visual and code design),
+ *          - Might contain traces of code from official Android Developer documentation and
+ *          default templates from Android Studio
+ *          - getGridViewOptimalNumberOfColumns code received from Udacity reviewer
+ *          <p>
+ *              class to provide common JSON methods
  */
 
 public class JSONUtils {

@@ -13,8 +13,18 @@ import java.io.File;
 import java.net.URL;
 
 /**
- * TODO documentation
- * Created by bivanbi on 2018.03.04..
+ * Udacity Android Developer Nanodegree - Project Popular Movies stage 2
+ *
+ * @author balazs.lengyak@gmail.com
+ * @version 2.0
+ *          <p>
+ *          - Inspired by dozens of online found examples (both visual and code design),
+ *          - Might contain traces of code from official Android Developer documentation and
+ *          default templates from Android Studio
+ *          - getGridViewOptimalNumberOfColumns code received from Udacity reviewer
+ *          <p>
+ *
+ *              loader class for poster cache save or delete background operations
  */
 
 public class PosterCacheLoader extends AsyncTaskLoader<Integer> {
@@ -27,12 +37,28 @@ public class PosterCacheLoader extends AsyncTaskLoader<Integer> {
     private int mOperation;
     private MovieData mMovieData;
 
+    /**
+     * constructor when deleting files
+     *
+     * @param context   is the calling context
+     * @param operation is the operation mode, see class public static String OPERATION_*
+     * @param movieData is the movie data to operate on
+     */
     public PosterCacheLoader(Context context, int operation, MovieData movieData) {
         super(context);
         mOperation = operation;
         mMovieData = movieData;
     }
 
+    /**
+     * constructor when downloading files
+     *
+     * @param context is the calling context
+     * @param operation is the operation mode, see class public static String OPERATION_*
+     * @param movieData is the movie data to operate on
+     * @param url is the URL pointing to image to be downloaded
+     * @param saveFile is the File object where image should be saved to
+     */
     public PosterCacheLoader(Context context, int operation, MovieData movieData,
             URL url,
             File saveFile) {
@@ -47,6 +73,10 @@ public class PosterCacheLoader extends AsyncTaskLoader<Integer> {
         forceLoad();
     }
 
+    /**
+     * background job to download or delete image
+     * @return exit status code, see RESULT_CODE_*
+     */
     @Override
     public Integer loadInBackground() {
         switch (mOperation) {

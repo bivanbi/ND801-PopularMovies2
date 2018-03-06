@@ -63,7 +63,6 @@ public class MainActivity extends AppCompatActivity implements
 
     private static final int MOVIEDATA_LOADER_ID = 1;
 
-    //  movie list views TODO ButterKnife
     @BindView(R.id.recyclerview_movielist)
     RecyclerView mRecyclerView;
     @BindView(R.id.textview_main_error_message)
@@ -83,7 +82,6 @@ public class MainActivity extends AppCompatActivity implements
     /**
      * this is the main entry point to our activity
      * <p>
-     * TODO Stage 2: restore instance state to maintain activity persistence across lifecycle events
      *
      * @param savedInstanceState is the saved instance state
      */
@@ -103,33 +101,11 @@ public class MainActivity extends AppCompatActivity implements
                         R.array.themoviedb_sort_by_query_values)[mSortBySpinnerIndex];
 
 
-        //  TODO if favourites are shown, we should continue without network, as they are cached
         //  if not connected to network, display error to let user know
         mIsConnectedToNetwork = NetworkUtils.isConnectedToNetwork(this);
 
-
-        //  TODO nice to have: have an overlay button showing warning - no network
-
-        //  do the hard work: load and display movie list data
-
-        //  TODO use content provider, probably for the whole project
-        //ContentResolver resolver = getContentResolver();
-        //Cursor cursor = resolver.query(uri, null, null, null, null);
-        /*
-        if (!mIsConnectedToNetwork && !sortBy.equals(getString(R.string
-        .themoviedb_source_favourites))) {
-            fallbackToFavourites();
-        } else {
-            mNoNetworkLoadFavouriteLayout.setVisibility(View.INVISIBLE);
-            Bundle args = new Bundle();
-            args.putString(LOADER_ARGUMENT_SORT_BY, sortBy);
-            getLoaderManager().initLoader(MOVIEDATA_LOADER_ID, args, this);
-        }*/
-
         loadMovieData(sortBy);
 
-        //  int spanCount = getResources().getInteger(R.integer.grid_layout_column_span);
-        //  layout manager to display movie poster grid
         GridLayoutManager layoutManager = DisplayUtilities.getOptimalGridLayoutManager(this,
                 getResources().getInteger(R.integer.grid_layout_target_pixel_width),
                 getResources().getInteger(R.integer.grid_layout_minimum_number_of_columns));
@@ -300,16 +276,14 @@ public class MainActivity extends AppCompatActivity implements
 
         @Override
         public void onClick(View v) {
-            //  TODO in case of network inavailability, offer the user the option to view favourites
-            //  TODO network error message is still shown, need to work through movieloader
+            //  in case of network inavailability, offer the user the option to view favourites
             int favouriteSpinnerIndex = mSpinnerArrayAdapter.getPosition(
                     getResources().getString(R.string.themoviedb_favourites));
             Log.d(TAG, "onClick: favourite spinner index: " + favouriteSpinnerIndex);
             mSortBySpinner.setSelection(favouriteSpinnerIndex);
             mSortBySpinnerIndex = favouriteSpinnerIndex;
-            //  TODO hide dialog if button is clicked
+            //  hide dialog if button is clicked
             mNoNetworkLoadFavouriteLayout.setVisibility(View.INVISIBLE);
-            //  TODO check if invisible views still receive onclick events
         }
     }
 

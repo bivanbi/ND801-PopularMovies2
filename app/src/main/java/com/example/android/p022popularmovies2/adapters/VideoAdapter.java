@@ -84,25 +84,18 @@ public class VideoAdapter extends RecyclerView.Adapter<VideoAdapter.VideoAdapter
 
     /**
      * method to set a new ArrayList to this adapter.
-     * TODO remove unnecessary debug logs
      *
      * @param arrayList is the new MovieData ArrayList
      */
     public void setMovieVideoArrayList(ArrayList<MovieVideo> arrayList) {
         Log.i(TAG, "updating Movie Review List, current count: " + getItemCount());
-        if (null == arrayList) {
-            Log.i(TAG,
-                    "updating Movie Review List, current count: " + getItemCount() + ", new: NULL");
-        } else {
-            Log.i(TAG, "updating Movie Review List, current count: "
-                    + getItemCount() + ", new: " + arrayList.size());
-        }
-
         mMovieVideoArrayList = arrayList;
         notifyDataSetChanged();
     }
 
-    //  define interface to be able to receive onClick events
+    /**
+     * interface definition for adapter onclick handler
+     */
     public interface VideoAdapterOnClickHandler {
         void onClick(MovieVideo movieVideo);
     }
