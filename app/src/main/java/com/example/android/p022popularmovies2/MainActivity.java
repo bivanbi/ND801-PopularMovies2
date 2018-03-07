@@ -4,6 +4,7 @@ import android.app.LoaderManager;
 import android.content.Intent;
 import android.content.Loader;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
@@ -60,6 +61,7 @@ public class MainActivity extends AppCompatActivity implements
     private static final String INTENT_EXTRA_NAME_MOVIEDATA = "MOVIE_DATA";
     private static final String LOADER_ARGUMENT_SORT_BY = "SORT_BY";
     private static final String SORT_BY_SPINNER_STATE = "SORT_BY_SPINNER";
+    private static final String LAYOUT_MANAGER_STATE = "LAYOUT_MANAGER_STATE";
 
     private static final int MOVIEDATA_LOADER_ID = 1;
 
@@ -79,6 +81,8 @@ public class MainActivity extends AppCompatActivity implements
     private ArrayAdapter<CharSequence> mSpinnerArrayAdapter;
     private boolean mIsConnectedToNetwork = false;
 
+    private Parcelable mLayoutManagerRestoreState = null;
+
     /**
      * this is the main entry point to our activity
      * <p>
@@ -92,26 +96,23 @@ public class MainActivity extends AppCompatActivity implements
 
         ButterKnife.bind(this);
 
-        if (null != savedInstanceState) {
-            mSortBySpinnerIndex = savedInstanceState.getInt(SORT_BY_SPINNER_STATE);
-        }
-
-        String sortBy =
-                getResources().getStringArray(
-                        R.array.themoviedb_sort_by_query_values)[mSortBySpinnerIndex];
-
-
         //  if not connected to network, display error to let user know
         mIsConnectedToNetwork = NetworkUtils.isConnectedToNetwork(this);
 
-        loadMovieData(sortBy);
 
-        GridLayoutManager layoutManager = DisplayUtilities.getOptimalGridLayoutManager(this,
+        GridLayoutManager gridLayoutManager = DisplayUtilities.getOptimalGridLayoutManager(this,
                 getResources().getInteger(R.integer.grid_layout_target_pixel_width),
                 getResources().getInteger(R.integer.grid_layout_minimum_number_of_columns));
 
+        if (null != savedInstanceState) {
+            Log.d(TAG, "onCreate: restoring state");
+            mSortBySpinnerIndex = savedInstanceState.getInt(SORT_BY_SPINNER_STATE);
+            //  actual state restoration will take place at onLoadFinished()
+            mLayoutManagerRestoreState = savedInstanceState.getParcelable(LAYOUT_MANAGER_STATE);
+        }
+
         //  bind our layoutmanager to our recyclerview
-        mRecyclerView.setLayoutManager(layoutManager);
+        mRecyclerView.setLayoutManager(gridLayoutManager);
 
         int nonFavouriteBackgroundColor =
                 ContextCompat.getColor(this, R.color.movieListItemTextBackground);
@@ -139,6 +140,8 @@ public class MainActivity extends AppCompatActivity implements
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putInt(SORT_BY_SPINNER_STATE, mSortBySpinnerIndex);
+        outState.putParcelable(LAYOUT_MANAGER_STATE,
+                mRecyclerView.getLayoutManager().onSaveInstanceState());
     }
 
     /**
@@ -147,6 +150,7 @@ public class MainActivity extends AppCompatActivity implements
      * @param sortBy    sort by popularity or user rating
      */
     private void loadMovieData(String sortBy) {
+        Log.d(TAG, "loadMovieData: called, sortBy: " + sortBy);
         mIsConnectedToNetwork = NetworkUtils.isConnectedToNetwork(this);
 
         if (!mIsConnectedToNetwork && !sortBy.equals(
@@ -250,16 +254,29 @@ public class MainActivity extends AppCompatActivity implements
     @Override
     public Loader<ArrayList<MovieData>> onCreateLoader(int id, Bundle args) {
         mLoadingIndicator.setVisibility(View.VISIBLE);
+        Log.d(TAG, "onCreateLoader called, sortBy: " + args.getString(LOADER_ARGUMENT_SORT_BY));
         return new MovieDataLoader(this, args.getString(LOADER_ARGUMENT_SORT_BY));
     }
 
     @Override
     public void onLoadFinished(Loader<ArrayList<MovieData>> loader,
             ArrayList<MovieData> movieDataArrayList) {
+        Log.d(TAG, "onLoadFinished called, sortBy index: " + mSortBySpinnerIndex
+                + ", data count: " + movieDataArrayList.size());
         mLoadingIndicator.setVisibility(View.INVISIBLE);
         if (null != movieDataArrayList) {
             showMovieDataView();
             mMovieAdapter.setMovieDataArrayList(movieDataArrayList);
+
+            if (null != mLayoutManagerRestoreState) {
+                Log.d(TAG, "onLoadFinished: restoring loadermanager state");
+                mRecyclerView.getLayoutManager().onRestoreInstanceState(mLayoutManagerRestoreState);
+                mLayoutManagerRestoreState = null;
+            } else {
+                Log.d(TAG, "onLoadFinished: scolling to position 0");
+                mRecyclerView.getLayoutManager().scrollToPosition(0);
+            }
+
         } else {
             showErrorMessage(getResources().getString(R.string.main_error_message));
         }

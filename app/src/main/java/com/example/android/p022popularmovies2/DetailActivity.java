@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.content.Loader;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -55,6 +56,9 @@ public class DetailActivity extends AppCompatActivity implements
         ReviewAdapter.ReviewAdapterOnClickHandler {
     private static final String TAG = DetailActivity.class.getSimpleName();
 
+    private static final String VIDEO_LAYOUT_MANAGER_STATE = "VIDEO_LAYOUT_MANAGER_STATE";
+    private static final String REVIEW_LAYOUT_MANAGER_STATE = "REVIEW_LAYOUT_MANAGER_STATE";
+
     private static final String INTENT_EXTRA_NAME_MOVIEDATA = "MOVIE_DATA";
 
     private static final String LOADER_ARGUMENT_MOVIE_ID = "MOVIE_ID";
@@ -100,6 +104,10 @@ public class DetailActivity extends AppCompatActivity implements
 
     private View.OnClickListener mToggleFavouriteOnClickListener;
 
+    private Parcelable mVideoLayoutManagerRestoreState = null;
+    private Parcelable mReviewLayoutManagerRestoreState = null;
+
+
     /**
      * constructor to our detailactivity
      *
@@ -118,6 +126,15 @@ public class DetailActivity extends AppCompatActivity implements
             Log.e(TAG, "onCreate: received null intent");
             return;
         }
+
+        //  actual state restoration will take place at onLoadFinished()
+        if (null != savedInstanceState) {
+            mVideoLayoutManagerRestoreState = savedInstanceState.getParcelable(
+                    VIDEO_LAYOUT_MANAGER_STATE);
+            mReviewLayoutManagerRestoreState = savedInstanceState.getParcelable(
+                    REVIEW_LAYOUT_MANAGER_STATE);
+        }
+
         getMovieDataFromItentExtra(callingIntent);
 
         showMovieData();
@@ -125,6 +142,15 @@ public class DetailActivity extends AppCompatActivity implements
         setupLayoutManagers();
         setupLoaders();
         setupToggleFavourite();
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putParcelable(VIDEO_LAYOUT_MANAGER_STATE,
+                mVideosRecyclerView.getLayoutManager().onSaveInstanceState());
+        outState.putParcelable(REVIEW_LAYOUT_MANAGER_STATE,
+                mReviewsRecyclerView.getLayoutManager().onSaveInstanceState());
     }
 
     /**
@@ -378,6 +404,10 @@ public class DetailActivity extends AppCompatActivity implements
             //mLoadingIndicator.setVisibility(View.INVISIBLE);
             if (null != movieReviewArrayList) {
                 mReviewAdapter.setMovieReviewArrayList(movieReviewArrayList);
+                if (null != mReviewLayoutManagerRestoreState) {
+                    mReviewsRecyclerView.getLayoutManager().
+                            onRestoreInstanceState(mReviewLayoutManagerRestoreState);
+                }
             } else {
                 Log.e(TAG, "onLoadFinished() called with null movieReviewArrayList");
                 mReviewsErrorMessageTextView.setText(
@@ -422,6 +452,10 @@ public class DetailActivity extends AppCompatActivity implements
                         "video arraylist contains " + movieVideoArrayList.size() + "elements");
                 //showMovieDataView();
                 mVideoAdapter.setMovieVideoArrayList(movieVideoArrayList);
+                if (null != mVideoLayoutManagerRestoreState) {
+                    mVideosRecyclerView.getLayoutManager().
+                            onRestoreInstanceState(mVideoLayoutManagerRestoreState);
+                }
             } else {
                 Log.e(TAG, "onLoadFinished() called with null movieVideoArrayList");
                 //showErrorMessage(getResources().getString(R.string.main_error_message));

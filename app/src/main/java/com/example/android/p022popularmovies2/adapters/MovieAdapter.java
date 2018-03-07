@@ -219,4 +219,6 @@ public class MovieAdapter
             mMoviePosterLoadingProgressbar.setVisibility(View.INVISIBLE);
         }
     }
+
+
 }
