@@ -133,7 +133,7 @@ public class TheMovieDbUtils {
                 callback.onError(view, movieData, imageSize);
             }
         } else {
-            Log.d(TAG, "loadMovieImageIntoView: " + movieId + ": loading from URL: " + imageUrl);
+            //Log.d(TAG, "loadMovieImageIntoView: " + movieId + ": loading from URL: " + imageUrl);
             loadMovieImageFromUrlIntoView(context, imageView, movieData, imageSize, imageUrl,
                     callback);
         }
@@ -187,9 +187,6 @@ public class TheMovieDbUtils {
                 .into(imageView, new Callback() {
                     @Override
                     public void onSuccess() {
-                        Log.i(TAG,
-                                "loadMovieImageFromUrlIntoView: " + movieId + ": loaded " + imageUrl
-                                        + " into imageView");
                         callback.onSuccess(imageView, movieData, imageSize);
                     }
 

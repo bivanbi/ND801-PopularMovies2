@@ -1,6 +1,6 @@
 package com.example.android.p022popularmovies2.loaders;
 
-import android.content.AsyncTaskLoader;
+import android.support.v4.content.AsyncTaskLoader;
 import android.content.Context;
 import android.database.Cursor;
 import android.util.Log;
@@ -31,9 +31,10 @@ import java.util.ArrayList;
 public class MovieDataLoader extends AsyncTaskLoader<ArrayList<MovieData>> {
 
     private final static String TAG = MovieDataLoader.class.getSimpleName();
-    private final ArrayList<MovieData> mMovieDataArrayList = null;
     private String mSortBy = null;
     private boolean mLoadFavouritesOnly;
+
+    private ArrayList<MovieData> mMovieData;
 
     /**
      * constructor for our class
@@ -43,8 +44,8 @@ public class MovieDataLoader extends AsyncTaskLoader<ArrayList<MovieData>> {
      */
     public MovieDataLoader(Context context, String sortBy) {
         super(context);
-        Log.d(TAG, "MovieDataLoader constructor with favourites cursor");
         mSortBy = sortBy;
+        Log.d(TAG, "MovieDataLoader constructor: sortby:" + mSortBy);
         if (mSortBy.equals(
                 context.getResources().getString(R.string.themoviedb_source_favourites))) {
             mSortBy = MovieContract.FavouriteMovieEntry.COLUMN_NAME_TITLE;
@@ -54,7 +55,21 @@ public class MovieDataLoader extends AsyncTaskLoader<ArrayList<MovieData>> {
 
     @Override
     protected void onStartLoading() {
-        forceLoad();
+        if (null != mMovieData) {
+            Log.d(TAG, "onStartLoading: delivering cached result with " + mMovieData.size()
+                    + " movies");
+            deliverResult(mMovieData);
+        } else {
+            Log.d(TAG, "onStartLoading: takeContentChanged, doing forceLoad");
+            forceLoad();
+        }
+    }
+
+
+    @Override
+    protected void onStopLoading() {
+        Log.d(TAG, "onStopLoading called");
+        cancelLoad();
     }
 
     /**
@@ -79,10 +94,34 @@ public class MovieDataLoader extends AsyncTaskLoader<ArrayList<MovieData>> {
                 Log.d(TAG,
                         "loadInBackground: favourites has " + favourites.getCount() + " entries");
             }
-            return TheMovieDbUtils.getMovieDbData(mSortBy, favourites, mLoadFavouritesOnly);
+
+            ArrayList<MovieData> movieData = TheMovieDbUtils.getMovieDbData(mSortBy, favourites,
+                    mLoadFavouritesOnly);
+            if (null == movieData) {
+                Log.d(TAG, "loadInBackground: getMovieDbData returned null");
+            } else {
+                Log.d(TAG,
+                        "loadInBackground: moviedbutils returned " + movieData.size() + " movies");
+            }
+            return movieData;
         } catch (Exception e) {
+            Log.e(TAG, "loadInBackground: got exception: " + e.getMessage());
             e.printStackTrace();
             return null;
         }
+    }
+
+    @Override
+    public void deliverResult(ArrayList<MovieData> data) {
+        Log.d(TAG, "deliverResult called with " + data.size() + " movies");
+        mMovieData = data;
+        super.deliverResult(data);
+    }
+
+    @Override
+    protected void onReset() {
+        Log.d(TAG, "onReset called");
+        mMovieData = null;
+        super.onReset();
     }
 }

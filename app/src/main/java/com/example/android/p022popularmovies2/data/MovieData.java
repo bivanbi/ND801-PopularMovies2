@@ -147,10 +147,10 @@ public class MovieData implements Parcelable {
             movieData.setOverview(movieDataJsonObject.optString(JSON_ATTRIBUTE_OVERVIEW));
             movieData.setReleaseDate(movieDataJsonObject.optString(JSON_ATTRIBUTE_RELEASE_DATE));
 
-            Log.d(TAG, "Downloaded Movie Data #" + movieDataArrayList.size() + ": "
-                    + movieData.toString());
             movieDataArrayList.add(movieData);
         }
+
+        Log.d(TAG, "Downloaded data for " + movieDataArrayList.size() + " movie(s)");
 
         return movieDataArrayList;
     }

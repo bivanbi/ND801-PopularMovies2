@@ -19,14 +19,10 @@ import android.provider.BaseColumns;
 
 public class MovieContract {
 
-    public static final String PATH_FAVOURITE_MOVIES = "favourite_movies";
-    public static final String PATH_POSTER_THUMBNAILS = "movie_poster_thumbnails";
-    public static final String PATH_POSTERS = "movie_posters";
+    static final String PATH_FAVOURITE_MOVIES = "favourite_movies";
     static final String AUTHORITY = "com.example.android.p022popularmovies2";
     // The base content URI = "content://" + <authority>
     private static final Uri BASE_CONTENT_URI = Uri.parse("content://" + AUTHORITY);
-    private static final String SQL_DELETE_ENTRIES =
-            "DROP TABLE IF EXISTS " + FavouriteMovieEntry.TABLE_NAME;
 
     //  prevent accidental instantiation by declaring constructor private
     private MovieContract() {
@@ -36,8 +32,6 @@ public class MovieContract {
     public static class FavouriteMovieEntry implements BaseColumns {
         public static final Uri CONTENT_URI = BASE_CONTENT_URI.buildUpon()
                 .appendPath(PATH_FAVOURITE_MOVIES).build();
-
-        public static final String TABLE_NAME = "movies";
         public static final String COLUMN_NAME_TITLE = "title";
         public static final String COLUMN_NAME_POPULARITY = "popularity";
         public static final String COLUMN_NAME_VOTE_AVERAGE = "vote_average";
@@ -45,7 +39,6 @@ public class MovieContract {
         public static final String COLUMN_NAME_ORIGINAL_TITLE = "original_title";
         public static final String COLUMN_NAME_OVERVIEW = "overview";
         public static final String COLUMN_NAME_RELEASE_DATE = "release_date";
+        static final String TABLE_NAME = "movies";
     }
-
-
 }

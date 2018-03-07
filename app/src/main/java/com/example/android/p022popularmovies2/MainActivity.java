@@ -1,11 +1,12 @@
 package com.example.android.p022popularmovies2;
 
-import android.app.LoaderManager;
 import android.content.Intent;
-import android.content.Loader;
 import android.os.Bundle;
 import android.os.Parcelable;
+import android.support.annotation.NonNull;
+import android.support.v4.app.LoaderManager;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.content.Loader;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -44,7 +45,8 @@ import butterknife.ButterKnife;
  *          <p>
  *          Main Activity:
  *          - display popular / highest voted movie posters
- *          - clicking a poster would fire an intent to DetailActivity to display various movie attributes
+ *          - clicking a poster would fire an intent to DetailActivity to display various movie
+ *          attributes
  *          <p>
  *          this is our "main" class that includes
  *          - asynctask data loading
@@ -53,7 +55,7 @@ import butterknife.ButterKnife;
  */
 public class MainActivity extends AppCompatActivity implements
         MovieAdapter.MovieAdapterOnClickHandler,
-        AdapterView.OnItemSelectedListener, LoaderManager.LoaderCallbacks<ArrayList<MovieData>> {
+        AdapterView.OnItemSelectedListener {
 
     private static final String TAG = MainActivity.class.getSimpleName();
 
@@ -82,6 +84,7 @@ public class MainActivity extends AppCompatActivity implements
     private boolean mIsConnectedToNetwork = false;
 
     private Parcelable mLayoutManagerRestoreState = null;
+    private boolean mIsSpinnerChanged = false;
 
     /**
      * this is the main entry point to our activity
@@ -93,6 +96,8 @@ public class MainActivity extends AppCompatActivity implements
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        Log.d(TAG, "onCreate called");
 
         ButterKnife.bind(this);
 
@@ -137,8 +142,14 @@ public class MainActivity extends AppCompatActivity implements
     }
 
     @Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+        Log.d(TAG, "onRestoreInstanceState called");
+    }
+
+    @Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
+        Log.d(TAG, "onSaveInstanceState: saving state: spinnerindex: " + mSortBySpinnerIndex);
         outState.putInt(SORT_BY_SPINNER_STATE, mSortBySpinnerIndex);
         outState.putParcelable(LAYOUT_MANAGER_STATE,
                 mRecyclerView.getLayoutManager().onSaveInstanceState());
@@ -147,7 +158,7 @@ public class MainActivity extends AppCompatActivity implements
     /**
      * method to initiate data loading and make responsible view visible
      *
-     * @param sortBy    sort by popularity or user rating
+     * @param sortBy sort by popularity or user rating
      */
     private void loadMovieData(String sortBy) {
         Log.d(TAG, "loadMovieData: called, sortBy: " + sortBy);
@@ -155,12 +166,16 @@ public class MainActivity extends AppCompatActivity implements
 
         if (!mIsConnectedToNetwork && !sortBy.equals(
                 getString(R.string.themoviedb_source_favourites))) {
+            Log.d(TAG, "loadMovieData: fallback to favourites");
             fallbackToFavourites();
         } else {
+            Log.d(TAG, "loadMovieData: normal load");
             mNoNetworkLoadFavouriteLayout.setVisibility(View.INVISIBLE);
             Bundle args = new Bundle();
             args.putString(LOADER_ARGUMENT_SORT_BY, sortBy);
-            getLoaderManager().restartLoader(MOVIEDATA_LOADER_ID, args, this);
+            //getLoaderManager().initLoader(MOVIEDATA_LOADER_ID, args, this);
+            getSupportLoaderManager()
+                    .restartLoader(MOVIEDATA_LOADER_ID, args, new MovieLoaderCallbacks());
         }
     }
 
@@ -168,6 +183,7 @@ public class MainActivity extends AppCompatActivity implements
      * method to make display view visible and error message invisible
      */
     private void showMovieDataView() {
+        Log.d(TAG, "showMovieDataView called");
         mErrorMessageDisplay.setVisibility(View.INVISIBLE);
         mRecyclerView.setVisibility(View.VISIBLE);
     }
@@ -176,6 +192,7 @@ public class MainActivity extends AppCompatActivity implements
      * method to make display view invisible and error message visible
      */
     private void showErrorMessage(String message) {
+        Log.d(TAG, "showErrorMessage called");
         mRecyclerView.setVisibility(View.INVISIBLE);
         mErrorMessageDisplay.setText(message);
         mErrorMessageDisplay.setVisibility(View.VISIBLE);
@@ -203,6 +220,7 @@ public class MainActivity extends AppCompatActivity implements
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
 
+        Log.d(TAG, "onCreateOptionsMenu called");
         //  inflate menu
         getMenuInflater().inflate(R.menu.main, menu);
         MenuItem sortByMenuItem = menu.findItem(R.id.spinner_sort_by);
@@ -223,6 +241,8 @@ public class MainActivity extends AppCompatActivity implements
         mSortBySpinner.setOnItemSelectedListener(this);
         mSortBySpinner.setSelection(mSortBySpinnerIndex);
 
+        //  let onLoadFinished know that spinner has changed so it will reset recyclerview
+        //  to position 0
         return true;
     }
 
@@ -236,8 +256,11 @@ public class MainActivity extends AppCompatActivity implements
      */
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+        Log.d(TAG, "onItemSelected called");
         mSortBySpinnerIndex = position;
-        String sortBy = getResources().getStringArray(R.array.themoviedb_sort_by_query_values)[position];
+        String sortBy = getResources().getStringArray(
+                R.array.themoviedb_sort_by_query_values)[position];
+        mIsSpinnerChanged = true;
         loadMovieData(sortBy);
     }
 
@@ -251,20 +274,28 @@ public class MainActivity extends AppCompatActivity implements
     }
 
 
-    @Override
-    public Loader<ArrayList<MovieData>> onCreateLoader(int id, Bundle args) {
-        mLoadingIndicator.setVisibility(View.VISIBLE);
-        Log.d(TAG, "onCreateLoader called, sortBy: " + args.getString(LOADER_ARGUMENT_SORT_BY));
-        return new MovieDataLoader(this, args.getString(LOADER_ARGUMENT_SORT_BY));
-    }
+    public class MovieLoaderCallbacks implements
+            LoaderManager.LoaderCallbacks<ArrayList<MovieData>> {
 
-    @Override
-    public void onLoadFinished(Loader<ArrayList<MovieData>> loader,
-            ArrayList<MovieData> movieDataArrayList) {
-        Log.d(TAG, "onLoadFinished called, sortBy index: " + mSortBySpinnerIndex
-                + ", data count: " + movieDataArrayList.size());
-        mLoadingIndicator.setVisibility(View.INVISIBLE);
-        if (null != movieDataArrayList) {
+        private final String TAG = MovieLoaderCallbacks.class.getSimpleName();
+
+        @NonNull
+        @Override
+        public Loader<ArrayList<MovieData>> onCreateLoader(int id,
+                Bundle args) {
+            mLoadingIndicator.setVisibility(View.VISIBLE);
+            Log.d(TAG, "onCreateLoader called, sortBy: " + args.getString(LOADER_ARGUMENT_SORT_BY));
+            return new MovieDataLoader(MainActivity.this, args.getString(LOADER_ARGUMENT_SORT_BY));
+        }
+
+        @Override
+        public void onLoadFinished(
+                @NonNull Loader<ArrayList<MovieData>> loader,
+                ArrayList<MovieData> movieDataArrayList) {
+
+            Log.d(TAG, "onLoadFinished called, sortBy index: " + mSortBySpinnerIndex
+                    + ", data count: " + movieDataArrayList.size());
+            mLoadingIndicator.setVisibility(View.INVISIBLE);
             showMovieDataView();
             mMovieAdapter.setMovieDataArrayList(movieDataArrayList);
 
@@ -274,17 +305,16 @@ public class MainActivity extends AppCompatActivity implements
                 mLayoutManagerRestoreState = null;
             } else {
                 Log.d(TAG, "onLoadFinished: scolling to position 0");
-                mRecyclerView.getLayoutManager().scrollToPosition(0);
+                if (mIsSpinnerChanged) {
+                    mRecyclerView.getLayoutManager().scrollToPosition(0);
+                    mIsSpinnerChanged = false;
+                }
             }
-
-        } else {
-            showErrorMessage(getResources().getString(R.string.main_error_message));
         }
-    }
 
-    @Override
-    public void onLoaderReset(Loader<ArrayList<MovieData>> loader) {
-        mMovieAdapter.setMovieDataArrayList(null);
+        @Override
+        public void onLoaderReset(@NonNull Loader<ArrayList<MovieData>> loader) {
+        }
     }
 
     public class NoNetworkFallbackToFavouritesOnClickListener implements View.OnClickListener {
@@ -303,5 +333,4 @@ public class MainActivity extends AppCompatActivity implements
             mNoNetworkLoadFavouriteLayout.setVisibility(View.INVISIBLE);
         }
     }
-
 }

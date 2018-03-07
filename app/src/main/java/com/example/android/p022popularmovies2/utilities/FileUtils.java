@@ -8,8 +8,6 @@ import android.util.Log;
 import com.example.android.p022popularmovies2.data.MovieData;
 
 import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
 
 /**
  * Udacity Android Developer Nanodegree - Project Popular Movies stage 2
@@ -31,10 +29,7 @@ public class FileUtils {
     private static final String TAG = FileUtils.class.getSimpleName();
 
     private static final String FILE_NAME_EXTENSION_PNG = ".png";
-    private static final Bitmap.CompressFormat COMPRESS_FORMAT_PNG = Bitmap.CompressFormat.PNG;
-
     private static final String FILE_NAME_EXTENSION_JPEG = ".jpg";
-    private static final Bitmap.CompressFormat COMPRESS_FORMAT_JPEG = Bitmap.CompressFormat.JPEG;
 
     private static final String MOVIE_POSTER_CACHE_MAIN_DIRECTORY = "favourite_movie_posters";
     private static final String MOVIE_POSTER_CACHE_DIRECTORY_FORMAT_STRINT = "%d";
@@ -260,7 +255,6 @@ public class FileUtils {
 
 
     public static boolean deletePosterCache(Context context, MovieData movieData) {
-        String dirName = constructPosterCacheDirName(context, movieData);
 
         File cacheDir = getPosterCacheDir(context, movieData);
         if (null == cacheDir) {

@@ -1,10 +1,11 @@
 package com.example.android.p022popularmovies2;
 
-import android.app.LoaderManager;
+import android.support.annotation.NonNull;
+import android.support.v4.app.LoaderManager;
 import android.content.ContentUris;
 import android.content.ContentValues;
 import android.content.Intent;
-import android.content.Loader;
+import android.support.v4.content.Loader;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Parcelable;
@@ -97,6 +98,7 @@ public class DetailActivity extends AppCompatActivity implements
     TextView mReviewsErrorMessageTextView;
     @BindView(R.id.textview_detail_video_load_error_message)
     TextView mVideosErrorMessageTextView;
+
     private ReviewAdapter mReviewAdapter;
     private VideoAdapter mVideoAdapter;
     //  the moviedata object with all the required attribute values
@@ -106,7 +108,6 @@ public class DetailActivity extends AppCompatActivity implements
 
     private Parcelable mVideoLayoutManagerRestoreState = null;
     private Parcelable mReviewLayoutManagerRestoreState = null;
-
 
     /**
      * constructor to our detailactivity
@@ -171,7 +172,7 @@ public class DetailActivity extends AppCompatActivity implements
      * and display message to let the user know if there is no network connectivity
      */
     private void setupLoaders() {
-        LoaderManager loaderManager = getLoaderManager();
+        LoaderManager loaderManager = getSupportLoaderManager();
         Bundle args = new Bundle();
         args.putLong(LOADER_ARGUMENT_MOVIE_ID, mMovieData.getMovieId());
 
@@ -292,19 +293,15 @@ public class DetailActivity extends AppCompatActivity implements
      */
     private void removeFavourite() {
         int result = removeMovieFromSql();
-        Log.d(TAG, "removeFavourite: removeMovieFromSql returned " + result);
 
         Toast.makeText(DetailActivity.this,
                 getResources().getString(R.string.toast_removed_from_favourites),
                 Toast.LENGTH_SHORT).show();
 
-        LoaderManager loaderManager = getLoaderManager();
+        LoaderManager loaderManager = getSupportLoaderManager();
         Bundle args = new Bundle();
         args.putInt(POSTER_CACHE_LOADER_ARGUMENT_OPERATION,
                 PosterCacheLoader.OPERATION_REMOVE_FROM_CACHE);
-
-        Log.d(TAG, "removeFavourite: calling poster cache loader with operation "
-                + args.getInt(POSTER_CACHE_LOADER_ARGUMENT_OPERATION));
 
         loaderManager.restartLoader(POSTER_CACHE_LOADER_ID, args,
                 new PosterCacheLoaderCallbacks());
@@ -324,7 +321,7 @@ public class DetailActivity extends AppCompatActivity implements
 
             //  if there is movie poster, save it to cache
             if (null != mMovieData.getPosterPath()) {
-                LoaderManager loaderManager = getLoaderManager();
+                LoaderManager loaderManager = getSupportLoaderManager();
                 Bundle args = new Bundle();
                 args.putInt(POSTER_CACHE_LOADER_ARGUMENT_OPERATION,
                         PosterCacheLoader.OPERATION_ADD_TO_CACHE);
@@ -389,6 +386,7 @@ public class DetailActivity extends AppCompatActivity implements
         MovieReviewLoaderCallbacks() {
         }
 
+        @NonNull
         @Override
         public Loader<ArrayList<MovieReview>> onCreateLoader(int id, Bundle args) {
             //mLoadingIndicator.setVisibility(View.VISIBLE);
@@ -398,9 +396,10 @@ public class DetailActivity extends AppCompatActivity implements
         }
 
         @Override
-        public void onLoadFinished(Loader<ArrayList<MovieReview>> loader,
+        public void onLoadFinished(@NonNull Loader<ArrayList<MovieReview>> loader,
                 ArrayList<MovieReview> movieReviewArrayList) {
             mReviewsLoadingProgressBar.setVisibility(View.INVISIBLE);
+
             //mLoadingIndicator.setVisibility(View.INVISIBLE);
             if (null != movieReviewArrayList) {
                 mReviewAdapter.setMovieReviewArrayList(movieReviewArrayList);
@@ -417,7 +416,7 @@ public class DetailActivity extends AppCompatActivity implements
         }
 
         @Override
-        public void onLoaderReset(Loader<ArrayList<MovieReview>> loader) {
+        public void onLoaderReset(@NonNull Loader<ArrayList<MovieReview>> loader) {
             mReviewAdapter.setMovieReviewArrayList(null);
         }
     }
@@ -433,6 +432,7 @@ public class DetailActivity extends AppCompatActivity implements
         MovieVideoLoaderCallbacks() {
         }
 
+        @NonNull
         @Override
         public Loader<ArrayList<MovieVideo>> onCreateLoader(int id, Bundle args) {
             mVideosLoadingProgressBar.setVisibility(View.VISIBLE);
@@ -441,7 +441,7 @@ public class DetailActivity extends AppCompatActivity implements
         }
 
         @Override
-        public void onLoadFinished(Loader<ArrayList<MovieVideo>> loader,
+        public void onLoadFinished(@NonNull Loader<ArrayList<MovieVideo>> loader,
                 ArrayList<MovieVideo> movieVideoArrayList) {
 
             mVideosLoadingProgressBar.setVisibility(View.INVISIBLE);
@@ -466,7 +466,7 @@ public class DetailActivity extends AppCompatActivity implements
         }
 
         @Override
-        public void onLoaderReset(Loader<ArrayList<MovieVideo>> loader) {
+        public void onLoaderReset(@NonNull Loader<ArrayList<MovieVideo>> loader) {
             mVideoAdapter.setMovieVideoArrayList(null);
         }
     }
@@ -500,16 +500,16 @@ public class DetailActivity extends AppCompatActivity implements
         PosterCacheLoaderCallbacks() {
         }
 
+        @NonNull
         @Override
         public Loader<Integer> onCreateLoader(int id, Bundle args) {
             mOperation = args.getInt(POSTER_CACHE_LOADER_ARGUMENT_OPERATION);
-            Log.d(TAG, "onCreateLoader called with operation " + mOperation);
 
             return new PosterCacheLoader(DetailActivity.this, mOperation, mMovieData);
         }
 
         @Override
-        public void onLoadFinished(Loader<Integer> loader,
+        public void onLoadFinished(@NonNull Loader<Integer> loader,
                 Integer result) {
             Log.i(TAG, "finished loading movie videos");
             if (PosterCacheLoader.RESULT_CODE_SUCCESS == result) {
@@ -522,7 +522,7 @@ public class DetailActivity extends AppCompatActivity implements
         }
 
         @Override
-        public void onLoaderReset(Loader<Integer> loader) {
+        public void onLoaderReset(@NonNull Loader<Integer> loader) {
         }
     }
 
